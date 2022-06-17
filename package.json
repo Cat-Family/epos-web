@@ -16,8 +16,12 @@
     "@mantine/modals": "^4.2.9",
     "@mantine/notifications": "^4.2.9",
     "dayjs": "^1.11.3",
+    "i18next": "^21.8.10",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-i18next": "^11.17.2",
+    "react-router-dom": "^6.3.0",
+    "tabler-icons-react": "^1.49.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
