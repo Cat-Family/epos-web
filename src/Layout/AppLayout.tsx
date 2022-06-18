@@ -1,89 +1,79 @@
-import React, { FC, useState } from "react";
-import {
-  AppShell,
-  Navbar,
-  Header,
-  ActionIcon,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
-  Group,
-  ScrollArea,
-  ColorScheme,
-} from "@mantine/core";
-import { SectionLinks } from "../components/SectionLink";
-import { Logo } from "../components/Logo";
-import { MoonStars, Sun } from "tabler-icons-react";
-import { User } from "../components/User";
-import { Outlet } from "react-router-dom";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import RestoreIcon from "@mui/icons-material/Restore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import Paper from "@mui/material/Paper";
+import { Outlet, useNavigate } from "react-router";
+import AppBar from "@mui/material/AppBar/AppBar";
+import { Toolbar, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
-interface AppLayoutProps {
-  colorScheme: ColorScheme;
-  toggleColorScheme: Function;
-}
-
-const AppLayout: FC<AppLayoutProps> = ({ colorScheme, toggleColorScheme }) => {
-  const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+const AppLayout = () => {
+  const [value, setValue] = React.useState(0);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   return (
-    <AppShell
-      styles={(theme) => ({
-        main: {
-          backgroundColor:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        },
-      })}
-      navbarOffsetBreakpoint="sm"
-      fixed
-      navbar={
-        <Navbar
-          p="sm"
-          hiddenBreakpoint="sm"
-          hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <AppBar position="fixed">
+        <Toolbar>
+          <Link to="/">
+            <img className="logo" src="../logo.svg" alt="logo" />
+          </Link>
+
+          <Typography variant="h6" component="h1">
+            Logo
+          </Typography>
+
+          <Box sx={{ flexGrow: 1 }} />
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>Test</Box>
+        </Toolbar>
+      </AppBar>
+
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+        }}
+      >
+        <Toolbar />
+        <Outlet />
+      </Box>
+
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            navigate(
+              newValue === 0
+                ? "/"
+                : newValue === 1
+                ? "/orders"
+                : newValue === 2
+                ? "/bill"
+                : "/report"
+            );
+          }}
         >
-          <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
-            <SectionLinks />
-          </Navbar.Section>
-
-          <Navbar.Section>
-            <User />
-          </Navbar.Section>
-        </Navbar>
-      }
-      header={
-        <Header height={70} p="md">
-          <Group sx={{ height: "100%" }} px={20} position="apart">
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
-
-            <Logo colorScheme={colorScheme} />
-            <ActionIcon
-              variant="default"
-              onClick={() => toggleColorScheme()}
-              size={30}
-            >
-              {colorScheme === "dark" ? (
-                <Sun size={16} />
-              ) : (
-                <MoonStars size={16} />
-              )}
-            </ActionIcon>
-          </Group>
-        </Header>
-      }
-    >
-      <Outlet />
-    </AppShell>
+          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
   );
 };
 
