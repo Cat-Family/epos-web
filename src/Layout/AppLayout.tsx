@@ -16,7 +16,7 @@ const AppLayout = () => {
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <AppBar position="fixed">
         <Toolbar>
           <Link to="/">
@@ -33,6 +33,8 @@ const AppLayout = () => {
         </Toolbar>
       </AppBar>
 
+      <Toolbar />
+
       <Box
         component="main"
         sx={{
@@ -40,12 +42,14 @@ const AppLayout = () => {
             theme.palette.mode === "light"
               ? theme.palette.grey[100]
               : theme.palette.grey[900],
+          display: "flex",
           flexGrow: 1,
         }}
       >
-        <Toolbar />
         <Outlet />
       </Box>
+
+      <Toolbar />
 
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
