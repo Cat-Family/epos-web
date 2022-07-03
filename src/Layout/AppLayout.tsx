@@ -14,6 +14,7 @@ import {
   Menu,
   ListItemIcon,
   Divider,
+  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
@@ -192,21 +193,17 @@ const AppLayout = () => {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
           display: "flex",
           flexGrow: 1,
+          overflow: "auto",
         }}
       >
         <Outlet />
       </Box>
 
-      <Toolbar />
-
+      <BottomNavigation />
       <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 10000 }}
         elevation={3}
       >
         <BottomNavigation
