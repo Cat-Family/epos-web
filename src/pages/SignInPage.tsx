@@ -54,11 +54,14 @@ export default function SignInSide() {
   const userActions = useUserActions();
   const [loading, setLoading] = useState<boolean>(false);
   const [checkCode, setCheckCode] = useState<number>(1);
+  const [codeError, setCodeError] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setFocus,
+    setError,
   } = useForm<ValidationInput>({
     resolver: yupResolver(validationSchema),
   });
@@ -71,7 +74,10 @@ export default function SignInSide() {
       value.password as string,
       value.randomKey as string
     );
-
+    if (res.message === "验证码错误") {
+      setFocus("randomKey");
+      setError("randomKey", { type: "custom", message: "验证码错误" });
+    }
     setLoading(false);
   };
 
@@ -162,6 +168,7 @@ export default function SignInSide() {
                 autoComplete="randomKey"
                 {...register("randomKey")}
                 error={errors.hasOwnProperty("randomKey")}
+                helperText={errors.randomKey?.message}
               />
               <Box
                 width="100%"

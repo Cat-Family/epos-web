@@ -1,9 +1,11 @@
 import { useRecoilState } from "recoil";
 import axiosInstance from "../app/request";
 import authAtom from "../state/authState";
+import { useSnackbar } from "notistack";
 
 const userActions = () => {
   const [auth, setAuth] = useRecoilState(authAtom);
+  const { enqueueSnackbar } = useSnackbar();
 
   const login = async (
     storeCode: string,
@@ -19,8 +21,13 @@ const userActions = () => {
         randomKey,
       });
       setAuth(res.data);
+      localStorage.setItem("refreshToken", res.data.data.refreshToken);
+      localStorage.setItem("accessToken", res.data.data.accessToken);
+      enqueueSnackbar("登录成功", { variant: "success" });
+
       return res;
-    } catch (error) {
+    } catch (error: any) {
+      enqueueSnackbar(error.message, { variant: "error" });
       return error;
     }
   };
