@@ -43,9 +43,9 @@ const validationSchema = object({
   storeCode: string()
     .required("商家码不能为空")
     .matches(/^[A-Z]{4}$/, "商家码格式错误"),
-  userName: string().required("用户名不能为空"),
+  username: string().required("用户名不能为空"),
   password: string().required("密码不能为空"),
-  randomKey: string().required("验证码不能为空"),
+  randomkey: string().required("验证码不能为空"),
 });
 
 type ValidationInput = TypeOf<typeof validationSchema>;
@@ -70,13 +70,13 @@ export default function SignInSide() {
     setLoading(true);
     const res = await userActions.login(
       value.storeCode as string,
-      value.userName as string,
+      value.username as string,
       value.password as string,
-      value.randomKey as string
+      value.randomkey as string
     );
     if (res.message === "验证码错误") {
-      setFocus("randomKey");
-      setError("randomKey", { type: "custom", message: "验证码错误" });
+      setFocus("randomkey");
+      setError("randomkey", { type: "custom", message: "验证码错误" });
     }
     setLoading(false);
   };
@@ -139,12 +139,12 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="userName"
+                id="username"
                 label="用户名"
                 autoComplete="user-name"
-                {...register("userName")}
-                error={errors.hasOwnProperty("userName")}
-                helperText={errors.userName?.message}
+                {...register("username")}
+                error={errors.hasOwnProperty("username")}
+                helperText={errors.username?.message}
               />
               <TextField
                 margin="normal"
@@ -164,11 +164,11 @@ export default function SignInSide() {
                 required
                 label="验证码"
                 fullWidth
-                id="randomKey"
-                autoComplete="randomKey"
-                {...register("randomKey")}
-                error={errors.hasOwnProperty("randomKey")}
-                helperText={errors.randomKey?.message}
+                id="randomkey"
+                autoComplete="randomkey"
+                {...register("randomkey")}
+                error={errors.hasOwnProperty("randomkey")}
+                helperText={errors.randomkey?.message}
               />
               <Box
                 width="100%"

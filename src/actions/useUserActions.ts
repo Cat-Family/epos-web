@@ -9,16 +9,16 @@ const userActions = () => {
 
   const login = async (
     storeCode: string,
-    userName: string,
+    username: string,
     password: string,
-    randomKey: string
+    randomkey: string
   ) => {
     try {
       const res = await axiosInstance.post("/qy/api/user/loginByUp", {
         storeCode,
-        userName,
+        username,
         password,
-        randomKey,
+        randomkey,
       });
       setAuth(res.data);
       localStorage.setItem("refreshToken", res.data.data.refreshToken);

@@ -13,6 +13,7 @@ let accessToken: string | null = localStorage.getItem("accessToken");
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   timeout: 6000,
+  withCredentials:true
 });
 
 axiosInstance.interceptors.request.use(
