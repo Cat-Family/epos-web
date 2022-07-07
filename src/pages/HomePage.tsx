@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -9,7 +9,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import PrintIcon from "@mui/icons-material/Print";
 import ShareIcon from "@mui/icons-material/Share";
-import { CardHeader, Grid, IconButton } from "@mui/material";
+import { CardHeader, Container, Grid, IconButton, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
@@ -21,6 +21,7 @@ import { grey } from "@mui/material/colors";
 import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import useMenuAction from "../actions/useMenuActions";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 const drawerBleeding = 84;
 
@@ -70,7 +71,7 @@ export default function HomePage(props: Props) {
   const { window } = props;
   const menuAction = useMenuAction();
   const [menu, setMenu] = useRecoilState(menuState);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
 
   const container =
@@ -79,7 +80,11 @@ export default function HomePage(props: Props) {
   useLayoutEffect(() => {
     menuAction.getMenu();
   }, []);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+
+  useEffect(() => {
+    if (menu.length > 0) setValue(menu[0]?.categoryType);
+  }, [menu]);
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -108,46 +113,42 @@ export default function HomePage(props: Props) {
           display: "flex",
         }}
       >
-        <Tabs
-          orientation="vertical"
-          value={value}
-          variant="scrollable"
-          allowScrollButtonsMobile={true}
-          scrollButtons="auto"
-          onChange={handleChange}
-          sx={{
-            position: "fixed",
-            borderRight: 1,
-            height: "68%",
-            borderColor: "divider",
-          }}
-        >
+        <TabContext value={value}>
+          <Box sx={{ height: 1, overflow: "auto" }}>
+            <TabList
+              orientation="vertical"
+              value={value}
+              variant="scrollable"
+              allowScrollButtonsMobile={true}
+              scrollButtons="auto"
+              onChange={handleChange}
+              aria-label="tabs"
+            >
+              {menu?.map((item: any) => (
+                <Tab
+                  key={item.categoryType}
+                  label={item.categoryName}
+                  value={item.categoryType}
+                />
+              ))}
+            </TabList>
+          </Box>
           {menu?.map((item: any) => (
-            <Tab
-              key={item.categoryType}
-              label={item.categoryName}
-              {...a11yProps(item.categoryType)}
-            />
+            <TabPanel
+              value={item.categoryType}
+              sx={{ overflow: "auto", direction: "row", display: "flex" }}
+            >
+              {item?.products.map((item: any, index: number) => (
+                <Card key={index} sx={{ maxHeight: 50 }}>
+                  <CardHeader
+                    subheaderTypographyProps={{ fontSize: ".8em" }}
+                    subheader={item.productName}
+                  />
+                </Card>
+              ))}
+            </TabPanel>
           ))}
-        </Tabs>
-        <Box sx={{ width: 112 }} />
-        <Grid p={1} flexGrow={1} container spacing={2} pb={150}>
-          {menu[value]?.products.map((item: any, index: number) => (
-            <Grid key={index} item xs={6} sm={6} md={4} lg={3} xl={2}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  image={item.productIcon}
-                  alt={item.productName}
-                />
-                <CardHeader
-                  subheaderTypographyProps={{ fontSize: ".8em" }}
-                  subheader={item.productName}
-                />
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        </TabContext>
       </Box>
 
       <SpeedDial
@@ -163,44 +164,6 @@ export default function HomePage(props: Props) {
           />
         ))}
       </SpeedDial>
-
-      <SwipeableDrawer
-        container={container}
-        anchor="bottom"
-        open={open}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-        swipeAreaWidth={82}
-        disableSwipeToOpen={false}
-        ModalProps={{
-          keepMounted: true,
-        }}
-      >
-        <StyledBox
-          sx={{
-            position: "absolute",
-            top: -drawerBleeding,
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
-            visibility: "visible",
-            right: 0,
-            left: 0,
-            bottom: 100,
-          }}
-        >
-          <Puller />
-        </StyledBox>
-        <StyledBox
-          sx={{
-            px: 2,
-            pb: 2,
-            height: "100%",
-            overflow: "auto",
-          }}
-        >
-          <Skeleton variant="rectangular" height="100%" />
-        </StyledBox>
-      </SwipeableDrawer>
     </Box>
   );
 }
