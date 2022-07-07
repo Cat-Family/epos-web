@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -9,24 +9,18 @@ import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import PrintIcon from "@mui/icons-material/Print";
 import ShareIcon from "@mui/icons-material/Share";
-import {
-  CardHeader,
-  CssBaseline,
-  Grid,
-  IconButton,
-  Toolbar,
-} from "@mui/material";
+import { CardHeader, Grid, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
-import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { styled } from "@mui/material/styles";
 import { Global } from "@emotion/react";
 import { grey } from "@mui/material/colors";
+import { useRecoilState } from "recoil";
+import menuState from "../state/menuState";
+import useMenuAction from "../actions/useMenuActions";
 
 const drawerBleeding = 84;
 
@@ -73,22 +67,25 @@ function a11yProps(index: number) {
 }
 
 export default function HomePage(props: Props) {
-  const [value, setValue] = React.useState(0);
+  const { window } = props;
+  const menuAction = useMenuAction();
+  const [menu, setMenu] = useRecoilState(menuState);
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
+  useLayoutEffect(() => {
+    menuAction.getMenu();
+  }, []);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const { window } = props;
-  const [open, setOpen] = React.useState(false);
-
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
-
-  // This is used only for the example
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box
@@ -125,30 +122,28 @@ export default function HomePage(props: Props) {
             borderColor: "divider",
           }}
         >
-          <Tab label="鸡杂" {...a11yProps(0)} />
-          <Tab label="干锅" {...a11yProps(1)} />
-          <Tab label="汤锅" {...a11yProps(2)} />
-          <Tab label="炒菜" {...a11yProps(3)} />
-          <Tab label="汤" {...a11yProps(4)} />
-          <Tab label="配菜" {...a11yProps(5)} />
-          <Tab label="酒水" {...a11yProps(6)} />
+          {menu?.map((item: any) => (
+            <Tab
+              key={item.categoryType}
+              label={item.categoryName}
+              {...a11yProps(item.categoryType)}
+            />
+          ))}
         </Tabs>
         <Box sx={{ width: 112 }} />
         <Grid p={1} flexGrow={1} container spacing={2} pb={150}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-            <Grid item key={item} xs={6} sm={6} md={4} lg={3} xl={2}>
+          {menu[value]?.products.map((item: any, index: number) => (
+            <Grid key={index} item xs={6} sm={6} md={4} lg={3} xl={2}>
               <Card>
                 <CardMedia
                   component="img"
-                  image="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/IMG_3695.PNG"
-                  alt="Paella dish"
+                  image={item.productIcon}
+                  alt={item.productName}
                 />
-                <CardHeader subheader="Shrimp" />
-                <CardActions disableSpacing>
-                  <IconButton aria-label="share" size="small">
-                    <ShareIcon />
-                  </IconButton>
-                </CardActions>
+                <CardHeader
+                  subheaderTypographyProps={{ fontSize: ".8em" }}
+                  subheader={item.productName}
+                />
               </Card>
             </Grid>
           ))}
@@ -157,7 +152,7 @@ export default function HomePage(props: Props) {
 
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: "fixed", bottom: 108, right: 8 }}
+        sx={{ position: "fixed", bottom: 86, right: 8 }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (

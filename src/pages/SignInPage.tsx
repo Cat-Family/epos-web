@@ -54,7 +54,6 @@ export default function SignInSide() {
   const userActions = useUserActions();
   const [loading, setLoading] = useState<boolean>(false);
   const [checkCode, setCheckCode] = useState<number>(1);
-  const [codeError, setCodeError] = useState<boolean>(false);
 
   const {
     register,
