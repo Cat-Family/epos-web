@@ -8,8 +8,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import PrintIcon from "@mui/icons-material/Print";
 import ShareIcon from "@mui/icons-material/Share";
-import { CardHeader, Container } from "@mui/material";
-import Card from "@mui/material/Card";
+import Button from "@mui/material/Button";
 import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import useMenuAction from "../actions/useMenuActions";
@@ -92,12 +91,13 @@ export default function HomePage() {
                   }}
                 >
                   {item?.products.map((item: any) => (
-                    <Card sx={{ width: "5rem", pr: 0 }}>
-                      <CardHeader
-                        subheaderTypographyProps={{ fontSize: ".8em" }}
-                        subheader={item.productName}
-                      />
-                    </Card>
+                    <Button
+                      color="info"
+                      variant="outlined"
+                      sx={{ width: "8rem", height: "4rem" }}
+                    >
+                      {item.productName}
+                    </Button>
                   ))}
                 </Box>
               </TabPanel>
@@ -108,7 +108,7 @@ export default function HomePage() {
 
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: "fixed", bottom: 60, right: 8 }}
+        sx={{ position: "fixed", bottom: 60, right: 4 }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (
