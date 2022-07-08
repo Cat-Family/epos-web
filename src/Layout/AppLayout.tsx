@@ -200,7 +200,6 @@ const AppLayout = () => {
       >
         <Outlet />
       </Box>
-      <Toolbar />
 
       <BottomNavigation />
 

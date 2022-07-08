@@ -70,7 +70,7 @@ function a11yProps(index: number) {
 export default function HomePage(props: Props) {
   const { window } = props;
   const menuAction = useMenuAction();
-  const [menu, setMenu] = useRecoilState(menuState);
+  const [menu, setMenu] = useRecoilState<any>(menuState);
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -108,13 +108,9 @@ export default function HomePage(props: Props) {
           },
         }}
       />
-      <Box
-        sx={{
-          display: "flex",
-        }}
-      >
+      <Box sx={{ width: "100vw", typography: "body1", display: "flex" }}>
         <TabContext value={value}>
-          <Box sx={{ height: 1, overflow: "auto" }}>
+          <Box sx={{ height: 1, position: "fixed" }}>
             <TabList
               orientation="vertical"
               value={value}
@@ -133,27 +129,35 @@ export default function HomePage(props: Props) {
               ))}
             </TabList>
           </Box>
-          {menu?.map((item: any) => (
-            <TabPanel
-              value={item.categoryType}
-              sx={{ overflow: "auto", direction: "row", display: "flex" }}
-            >
-              {item?.products.map((item: any, index: number) => (
-                <Card key={index} sx={{ maxHeight: 50 }}>
-                  <CardHeader
-                    subheaderTypographyProps={{ fontSize: ".8em" }}
-                    subheader={item.productName}
-                  />
-                </Card>
-              ))}
-            </TabPanel>
-          ))}
+          <Box sx={{ flexGrow: 1, pl: "4rem" }}>
+            {menu?.map((item: any) => (
+              <TabPanel value={item.categoryType}>
+                <Container
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 1,
+                  }}
+                >
+                  {item?.products.map((item: any, index: number) => (
+                    <Card sx={{ width: "8rem" }} key={index}>
+                      <CardHeader
+                        subheaderTypographyProps={{ fontSize: ".8em" }}
+                        subheader={item.productName}
+                      />
+                    </Card>
+                  ))}
+                </Container>
+              </TabPanel>
+            ))}
+          </Box>
         </TabContext>
       </Box>
 
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: "fixed", bottom: 86, right: 8 }}
+        sx={{ position: "fixed", bottom: 60, right: 8 }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (
