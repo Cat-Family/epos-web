@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -13,6 +13,7 @@ import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import useMenuAction from "../actions/useMenuActions";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import ProductDialog from "../components/ProductDialog";
 
 const actions = [
   { icon: <FileCopyIcon />, name: "Copy" },
@@ -29,16 +30,20 @@ interface TabPanelProps {
 
 export default function HomePage() {
   const menuAction = useMenuAction();
+  const productDialog = useRef<any>();
   const [menu, setMenu] = useRecoilState<any>(menuState);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("1001");
 
   useLayoutEffect(() => {
     menuAction.getMenu();
   }, []);
 
-  useEffect(() => {
-    if (menu.length > 0) setValue(menu[0]?.categoryType);
+  useLayoutEffect(() => {
+    if (menu[0]?.categoryType) {
+      console.log(menu);
+    }
   }, [menu]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -74,14 +79,18 @@ export default function HomePage() {
                 <Tab
                   key={item.categoryType}
                   label={item.categoryName}
-                  value={item.categoryType}
+                  value={item.categoryType.toString()}
                 />
               ))}
             </TabList>
           </Box>
           <Box sx={{ flexGrow: 1, pl: "5rem" }}>
             {menu?.map((item: any) => (
-              <TabPanel sx={{ pr: 0 }} value={item.categoryType}>
+              <TabPanel
+                sx={{ pr: 0 }}
+                key={item.categoryType}
+                value={item.categoryType.toString()}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -92,8 +101,12 @@ export default function HomePage() {
                 >
                   {item?.products.map((item: any) => (
                     <Button
+                      key={item.productItemId}
                       color="info"
                       variant="outlined"
+                      onClick={() => {
+                        productDialog.current.productDialogOpen(item);
+                      }}
                       sx={{ width: "8rem", height: "4rem" }}
                     >
                       {item.productName}
@@ -105,6 +118,7 @@ export default function HomePage() {
           </Box>
         </TabContext>
       </Box>
+      <ProductDialog ref={productDialog} />
 
       <SpeedDial
         ariaLabel="SpeedDial"
