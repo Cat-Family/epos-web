@@ -13,9 +13,6 @@ import useUserActions from "../actions/useUserActions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, TypeOf } from "yup";
-import { baseURL } from "../app/request";
-import { IconButton } from "@mui/material";
-import { RefreshOutlined } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 function Copyright(props: any) {
@@ -45,7 +42,6 @@ const validationSchema = object({
     .matches(/^[A-Z]{4}$/, "商家码格式错误"),
   username: string().required("用户名不能为空"),
   password: string().required("密码不能为空"),
-  randomkey: string().required("验证码不能为空"),
 });
 
 type ValidationInput = TypeOf<typeof validationSchema>;
@@ -70,13 +66,8 @@ export default function SignInSide() {
     const res = await userActions.login(
       value.storeCode as string,
       value.username as string,
-      value.password as string,
-      value.randomkey as string
+      value.password as string
     );
-    if (res.message === "验证码错误") {
-      setFocus("randomkey");
-      setError("randomkey", { type: "custom", message: "验证码错误" });
-    }
     setLoading(false);
   };
 
@@ -157,37 +148,6 @@ export default function SignInSide() {
                 error={errors.hasOwnProperty("password")}
                 helperText={errors.password?.message}
               />
-
-              <TextField
-                margin="normal"
-                required
-                label="验证码"
-                fullWidth
-                id="randomkey"
-                autoComplete="randomkey"
-                {...register("randomkey")}
-                error={errors.hasOwnProperty("randomkey")}
-                helperText={errors.randomkey?.message}
-              />
-              <Box
-                width="100%"
-                pt=".8rem"
-                display="flex"
-                alignItems="end"
-                justifyContent="space-between"
-              >
-                <img
-                  src={`${baseURL}/qy/api/common/captchaImage?checkCode=${checkCode}`}
-                />
-                <IconButton
-                  onClick={() => {
-                    setCheckCode((pre) => (pre += 1));
-                    console.log(checkCode);
-                  }}
-                >
-                  <RefreshOutlined fontSize="small" />
-                </IconButton>
-              </Box>
               <LoadingButton
                 type="submit"
                 fullWidth

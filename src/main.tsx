@@ -7,13 +7,13 @@ import App from "./App";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RecoilRoot>
-      <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <App />
-        </StyledEngineProvider>
-      </BrowserRouter>
-    </RecoilRoot>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <RecoilRoot>
+    <BrowserRouter>
+      <StyledEngineProvider injectFirst>
+        <App />
+      </StyledEngineProvider>
+    </BrowserRouter>
+  </RecoilRoot>
+  // </React.StrictMode>
 );

@@ -14,6 +14,7 @@ import menuState from "../state/menuState";
 import useMenuAction from "../actions/useMenuActions";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProductDialog from "../components/ProductDialog";
+import Skeleton from "@mui/material/Skeleton";
 
 const actions = [
   { icon: <FileCopyIcon />, name: "Copy" },
@@ -32,7 +33,7 @@ export default function HomePage() {
   const menuAction = useMenuAction();
   const productDialog = useRef<any>();
   const [menu, setMenu] = useRecoilState<any>(menuState);
-  const [value, setValue] = useState<string>("1001");
+  const [value, setValue] = useState<string>("");
 
   useLayoutEffect(() => {
     menuAction.getMenu();
@@ -40,7 +41,7 @@ export default function HomePage() {
 
   useLayoutEffect(() => {
     if (menu[0]?.categoryType) {
-      console.log(menu);
+      setValue(menu[0].categoryType.toString());
     }
   }, [menu]);
 
@@ -57,66 +58,95 @@ export default function HomePage() {
       }}
     >
       <Box sx={{ width: "100vw", display: "flex" }}>
-        <TabContext value={value}>
-          <Box
-            sx={{
-              height: 1,
-              position: "fixed",
-              borderRight: 1,
-              borderColor: "divider",
-            }}
-          >
-            <TabList
-              orientation="vertical"
-              value={value}
-              variant="scrollable"
-              allowScrollButtonsMobile={true}
-              scrollButtons="auto"
-              onChange={handleChange}
-              aria-label="tabs"
+        {value ? (
+          <TabContext value={value}>
+            <Box
+              sx={{
+                height: 1,
+                position: "fixed",
+                borderRight: 1,
+                borderColor: "divider",
+              }}
             >
-              {menu?.map((item: any) => (
-                <Tab
-                  key={item.categoryType}
-                  label={item.categoryName}
-                  value={item.categoryType.toString()}
-                />
-              ))}
-            </TabList>
-          </Box>
-          <Box sx={{ flexGrow: 1, pl: "5rem" }}>
-            {menu?.map((item: any) => (
-              <TabPanel
-                sx={{ pr: 0 }}
-                key={item.categoryType}
-                value={item.categoryType.toString()}
+              <TabList
+                orientation="vertical"
+                value={value}
+                variant="scrollable"
+                allowScrollButtonsMobile={true}
+                scrollButtons="auto"
+                onChange={handleChange}
+                aria-label="tabs"
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    gap: 1,
-                  }}
+                {menu?.map((item: any) => (
+                  <Tab
+                    key={item.categoryType}
+                    label={item.categoryName}
+                    value={item.categoryType.toString()}
+                  />
+                ))}
+              </TabList>
+            </Box>
+            <Box sx={{ flexGrow: 1, pl: "5rem" }}>
+              {menu?.map((item: any) => (
+                <TabPanel
+                  sx={{ pr: 0 }}
+                  key={item.categoryType}
+                  value={item.categoryType.toString()}
                 >
-                  {item?.products.map((item: any) => (
-                    <Button
-                      key={item.productItemId}
-                      color="info"
-                      variant="outlined"
-                      onClick={() => {
-                        productDialog.current.productDialogOpen(item);
-                      }}
-                      sx={{ width: "8rem", height: "4rem" }}
-                    >
-                      {item.productName}
-                    </Button>
-                  ))}
-                </Box>
-              </TabPanel>
-            ))}
-          </Box>
-        </TabContext>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                      gap: 1,
+                    }}
+                  >
+                    {item?.products.map((item: any) => (
+                      <Button
+                        key={item.productItemId}
+                        color="info"
+                        variant="outlined"
+                        onClick={() => {
+                          productDialog.current.productDialogOpen(item);
+                        }}
+                        sx={{ width: "8rem", height: "4rem" }}
+                      >
+                        {item.productName}
+                      </Button>
+                    ))}
+                  </Box>
+                </TabPanel>
+              ))}
+            </Box>
+          </TabContext>
+        ) : (
+          <>
+            <Box
+              sx={{
+                height: 1,
+                position: "fixed",
+                borderRight: 1,
+                borderColor: "divider",
+              }}
+            >
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+            </Box>
+            <Box sx={{ flexGrow: 1, pl: "5rem" }}>
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+            </Box>
+          </>
+        )}
       </Box>
       <ProductDialog ref={productDialog} />
 
