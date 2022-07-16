@@ -5,8 +5,10 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import JSEncrypt from "jsencrypt";
+// import { enqueueSnackbar } from "notistack";
 
-export const baseURL: string = "http://81.70.97.93:8083";
+// export const baseURL: string = "https://2904084071.eicp.vip";
+export const baseURL: string = "http://81.70.97.93";
 
 const PUBLICKEY = import.meta.env.PUBLICKEY;
 const encrypt = new JSEncrypt();
@@ -18,12 +20,16 @@ let clientId: string | null = localStorage.getItem("clientId");
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   timeout: 6000,
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
   (requestConfig: AxiosRequestConfig) => {
-    if (accessToken) {
-      requestConfig.headers = { authorization: `Bearer ${accessToken}` };
+    if (accessToken && clientId) {
+      requestConfig.headers = {
+        authorization: `Bearer ${accessToken}`,
+        clientid: clientId,
+      };
     }
     return requestConfig;
   },
@@ -50,23 +56,35 @@ axiosInstance.interceptors.response.use(
         localStorage.setItem("clientId", clientId as string);
       }
       return responseConfig;
-    } else if (responseConfig.data.code === 403 && refreshToken && clientId) {
+    }
+    if (responseConfig.data.code === 403 && refreshToken && clientId) {
       // refresh Token interceptor
       try {
         encrypt.setPublicKey(PUBLICKEY);
         const sign = encrypt.encrypt(`${clientId},${refreshToken}`);
-        const res = await axios.post(`${baseURL}/qy/api/user/session/refresh`, {
-          refreshToken,
-          clientId,
-          sign,
-        });
+        const res = await axios.post(
+          `${baseURL}/qy/api/user/session/refresh`,
+          {
+            refresh: refreshToken,
+            sign,
+            clientid: clientId,
+          },
+          {
+            headers: {
+              clientid: clientId,
+            },
+          }
+        );
         if (res.data.code === 201) {
+          // enqueueSnackbar("刷新令牌成功");
+
           localStorage.setItem("accessToken", res.data.data.accessToken);
           localStorage.setItem("refreshToken", res.data.data.refreshToken);
           accessToken = res.data.data.accessToken;
           refreshToken = res.data.data.refreshToken;
           return axiosInstance.request(responseConfig.config);
         }
+        // enqueueSnackbar("刷新令牌错误" + res.data.message);
         refreshToken = null;
         accessToken = null;
         clientId = null;
@@ -75,6 +93,7 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("clientId");
         return Promise.reject(responseConfig.data);
       } catch (error: any) {
+        // enqueueSnackbar("刷新令牌错误" + error.message);
         refreshToken = null;
         accessToken = null;
         clientId = null;
@@ -83,9 +102,19 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("clientId");
         return Promise.reject(responseConfig.data);
       }
-    } else {
+    }
+
+    if (responseConfig.data.code === 401) {
+      refreshToken = null;
+      accessToken = null;
+      clientId = null;
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("clientId");
       return Promise.reject(responseConfig.data);
     }
+
+    return Promise.reject(responseConfig.data);
   },
   async (err: AxiosError) => {
     return Promise.reject(err);

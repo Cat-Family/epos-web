@@ -1,13 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import PrintIcon from "@mui/icons-material/Print";
-import ShareIcon from "@mui/icons-material/Share";
 import Button from "@mui/material/Button";
 import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
@@ -15,13 +8,6 @@ import useMenuAction from "../actions/useMenuActions";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProductDialog from "../components/ProductDialog";
 import Skeleton from "@mui/material/Skeleton";
-
-const actions = [
-  { icon: <FileCopyIcon />, name: "Copy" },
-  { icon: <SaveIcon />, name: "Save" },
-  { icon: <PrintIcon />, name: "Print" },
-  { icon: <ShareIcon />, name: "Share" },
-];
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -149,20 +135,6 @@ export default function HomePage() {
         )}
       </Box>
       <ProductDialog ref={productDialog} />
-
-      <SpeedDial
-        ariaLabel="SpeedDial"
-        sx={{ position: "fixed", bottom: 60, right: 4 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
-      </SpeedDial>
     </Box>
   );
 }

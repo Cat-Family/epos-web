@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useState,
 } from "react";
 import Button from "@mui/material/Button";
@@ -36,14 +37,14 @@ const ProductDialog = forwardRef((props, ref) => {
     productItemId: 0,
     productPrice: "",
   });
-  const [state, setState] = useState();
+  // const [state, setState] = useState();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setState({
+  //     // ...state,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
 
   useImperativeHandle(ref, () => ({
     productDialogOpen(props: Product) {
@@ -80,7 +81,9 @@ const ProductDialog = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (formGroupRef.current) {
-      console.log(formGroupRef.current.children);
+      Array.prototype.slice
+        .call(formGroupRef.current.children)
+        .map((item) => console.log(item.id));
     }
   });
 
@@ -114,7 +117,8 @@ const ProductDialog = forwardRef((props, ref) => {
         </Box>
         {productInfo.dishes.length > 0 && (
           <Box
-            id="scroll-dialog-description"
+            maxHeight={240}
+            id="scroll-dialog"
             ref={descriptionElementRef}
             tabIndex={-1}
           >
@@ -125,16 +129,16 @@ const ProductDialog = forwardRef((props, ref) => {
               sx={{ m: 3 }}
               variant="standard"
             >
-              <FormLabel component="legend">Pick two</FormLabel>
+              <FormLabel component="legend">多选二</FormLabel>
               <FormGroup row={true} ref={formGroupRef}>
-                {productInfo.dishes.map((dish) => (
+                {productInfo.dishes.map((dish: any) => (
                   <FormControlLabel
                     key={dish.disheItemId}
                     id={dish.disheItemId}
                     control={
                       <Checkbox
                         // checked={gilad}
-                        onChange={handleChange}
+                        // onChange={handleChange}
                         name={dish.disheName}
                       />
                     }
@@ -142,13 +146,9 @@ const ProductDialog = forwardRef((props, ref) => {
                   />
                 ))}
               </FormGroup>
-              <FormHelperText>You can display an error</FormHelperText>
             </FormControl>
           </Box>
         )}
-        <Typography variant="body2" align="right">
-          小计: {parseFloat(productInfo.productPrice) * portion} 元
-        </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>取消</Button>
