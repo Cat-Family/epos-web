@@ -6,18 +6,21 @@ import OrdersPage from "./pages/OrdersPage";
 import BillsPage from "./pages/BillsPage";
 import ReportPage from "./pages/ReportPage";
 import SignInPage from "./pages/SignInPage";
+import { SnackbarProvider } from "notistack";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<AppLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/bills" element={<BillsPage />} />
-        <Route path="/report" element={<ReportPage />} />
-      </Route>
-      <Route path="/users/signin" element={<SignInPage />} />
-    </Routes>
+    <SnackbarProvider>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/bills" element={<BillsPage />} />
+          <Route path="/report" element={<ReportPage />} />
+        </Route>
+        <Route path="/users/signin" element={<SignInPage />} />
+      </Routes>
+    </SnackbarProvider>
   );
 };
 

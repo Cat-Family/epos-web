@@ -162,7 +162,7 @@ const AppLayout = () => {
             <img
               className="logo"
               style={{ height: 32, width: 32 }}
-              src="/src/favicon.svg"
+              src="https://vitejs.dev/logo.svg"
               alt="logo"
             />
           </Link>
@@ -172,6 +172,15 @@ const AppLayout = () => {
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
+
+          {location.pathname === "/" && (
+            <>
+              <Button sx={{ fontSize: "1.2rem" }} color="inherit">
+                1号
+              </Button>
+              <Box sx={{ flexGrow: 1 }} />
+            </>
+          )}
 
           <IconButton
             size="large"
@@ -202,8 +211,9 @@ const AppLayout = () => {
       </Box>
 
       <BottomNavigation />
+
       <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 10000 }}
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
         elevation={3}
       >
         <BottomNavigation
