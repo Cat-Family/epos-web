@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly PUBLICKEY: string;
+  readonly VITE_PUBLICKEY: string;
   // more env variables...
 }
 

@@ -10,7 +10,7 @@ import JSEncrypt from "jsencrypt";
 // export const baseURL: string = "https://2904084071.eicp.vip";
 export const baseURL: string = "http://81.70.97.93";
 
-const PUBLICKEY = import.meta.env.PUBLICKEY;
+const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();
 
 let refreshToken: string | null = localStorage.getItem("refreshToken");
@@ -61,6 +61,7 @@ axiosInstance.interceptors.response.use(
       // refresh Token interceptor
       try {
         encrypt.setPublicKey(PUBLICKEY);
+
         const sign = encrypt.encrypt(`${clientId},${refreshToken}`);
         const res = await axios.post(
           `${baseURL}/qy/api/user/session/refresh`,
