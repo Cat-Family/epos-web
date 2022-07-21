@@ -8,7 +8,7 @@ import JSEncrypt from "jsencrypt";
 // import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
-export const baseURL: string = "http://81.70.97.93";
+export const baseURL: string = "http://localhost:8083";
 
 const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();

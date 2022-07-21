@@ -158,18 +158,15 @@ const AppLayout = () => {
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <AppBar position="fixed">
         <Toolbar>
-          <Link to="/">
+          {/* <Link to="/">
             <img
               className="logo"
               style={{ height: 32, width: 32 }}
-              src="https://vitejs.dev/logo.svg"
+              src="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
               alt="logo"
             />
-          </Link>
+          </Link> */}
 
-          <Typography variant="h6" component="h1">
-            Logo
-          </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
 
