@@ -30,13 +30,19 @@ import {
   Logout,
   Settings,
 } from "@mui/icons-material";
+import useLoginOutActions from "../actions/useLoginOutActions";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
   const location = useLocation();
+  const loginOutActions = useLoginOutActions();
   const [anchorProfileMenu, setAnchorProfileMenu] =
     React.useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
+
+  const logout = async () => {
+    await loginOutActions.loginOut();
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorProfileMenu(event.currentTarget);
@@ -111,7 +117,7 @@ const AppLayout = () => {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          handleProfileMenuClose();
+          logout();
         }}
         component={Link}
         to={"/users/signin"}
