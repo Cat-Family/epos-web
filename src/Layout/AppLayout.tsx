@@ -1,10 +1,28 @@
-import * as React from "react";
+import React, {useLayoutEffect, useRef, useState} from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import { Outlet, useNavigate } from "react-router";
 import AppBar from "@mui/material/AppBar/AppBar";
+import { Link } from "react-router-dom";
+import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import DiningOutlined from "@mui/icons-material/DiningOutlined";
+import RestoreIcon from "@mui/icons-material/Restore";
+import { useLocation } from "react-router-dom";
+import type { DrawerProps, RadioChangeEvent } from 'antd';
+import * as antd from 'antd';
+import useLoginOutActions from "../actions/useUserActions";
+import useTableAction from "../actions/useTableActions";
+import {
+  ArrowForwardIosOutlined,
+  Brightness4Outlined,
+  Brightness7Outlined,
+  GTranslateOutlined,
+  Logout,
+  Settings,
+} from "@mui/icons-material";
 import {
   IconButton,
   Toolbar,
@@ -16,33 +34,56 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
-import DiningOutlined from "@mui/icons-material/DiningOutlined";
-import RestoreIcon from "@mui/icons-material/Restore";
-import { useLocation } from "react-router-dom";
-import {
-  ArrowForwardIosOutlined,
-  Brightness4Outlined,
-  Brightness7Outlined,
-  GTranslateOutlined,
-  Logout,
-  Settings,
-} from "@mui/icons-material";
-import useLoginOutActions from "../actions/useLoginOutActions";
+import {useRecoilState} from "recoil";
+import menuState from "../state/menuState";
+import tableState from "../state/tableState";
+import {TabPanel} from "@mui/lab";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
   const location = useLocation();
   const loginOutActions = useLoginOutActions();
+  const tableAction = useTableAction();
   const [anchorProfileMenu, setAnchorProfileMenu] =
     React.useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
+  const [visible, setVisible] = useState(false);
+  const [disable,setDisable] = useState(false);
+  const [table, setTable] = useRecoilState<any>(tableState);
+  const [placement, setPlacement] = useState<DrawerProps['placement']>('top');
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    setPlacement(e.target.value);
+  };
 
   const logout = async () => {
     await loginOutActions.loginOut();
   };
+
+  const queryTable = async () => {
+    const a = await tableAction.getTables();
+    console.log(a)
+  }
+
+
+  const showDrawer = () => {
+    queryTable();
+    setVisible(true);
+  };
+
+  useLayoutEffect(() => {
+    tableAction.getTables();
+  }, []);
+
+  useLayoutEffect(() => {
+    if (table[0]?.categoryType) {
+      setValue(table[0].categoryType.toString());
+    }
+  }, [table]);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorProfileMenu(event.currentTarget);
@@ -178,9 +219,10 @@ const AppLayout = () => {
 
           {location.pathname === "/" && (
             <>
-              <Button sx={{ fontSize: "1.2rem" }} color="inherit">
+              <Button sx={{ fontSize: "1.2rem" }} color="inherit" onClick={showDrawer}>
                 1号
               </Button>
+
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
@@ -212,6 +254,28 @@ const AppLayout = () => {
       >
         <Outlet />
       </Box>
+
+      <antd.Drawer
+        title="桌号选择"
+        placement={placement}
+        closable={false}
+        onClose={onClose}
+        visible={visible}
+        key={placement}
+        height="200"
+      >
+
+        {/*<Box sx={{display: "flex"}}>*/}
+        <antd.Space size={[18, 22]} wrap>
+          {table?.map((item: any) => (
+              <antd.Button type="primary" size="large" shape="circle">{item.tableNum}</antd.Button>
+              // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
+          ))}
+        </antd.Space>
+
+        {/*</Box>*/}
+
+      </antd.Drawer>
 
       <BottomNavigation />
 
