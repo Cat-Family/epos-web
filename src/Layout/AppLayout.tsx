@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   Divider,
   Button,
+  Switch,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
@@ -29,6 +30,8 @@ import {
   GTranslateOutlined,
   Logout,
   Settings,
+  SwapHoriz,
+  SwapHorizOutlined,
 } from "@mui/icons-material";
 import useLoginOutActions from "../actions/useLoginOutActions";
 
@@ -181,6 +184,9 @@ const AppLayout = () => {
               <Button sx={{ fontSize: "1.2rem" }} color="inherit">
                 1号
               </Button>
+              <IconButton color="inherit">
+                <SwapHorizOutlined fontSize="small" />
+              </IconButton>
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
