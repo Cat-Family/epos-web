@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import JSEncrypt from "jsencrypt";
-import {message} from "antd";
+import { message } from "antd";
 // import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
@@ -117,7 +117,7 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(responseConfig.data);
     }
 
-    if(responseConfig.data.code === 10000) {
+    if (responseConfig.data.code === 10000) {
       message.error(responseConfig.data.message);
     }
 

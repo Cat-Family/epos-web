@@ -1,161 +1,180 @@
 import React, {
-    FC,
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useMemo,
-    useState,
+  FC,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
 } from "react";
 import Button from "@mui/material/Button";
-import Dialog, {DialogProps} from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import {Box, Typography} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
-import * as antd from 'antd';
+import * as antd from "antd";
 
 interface Product {
-    productName: string;
-    dishes: Array<string>;
-    productCategoryType: number;
-    productItemId: number;
-    productPrice: string;
+  productName: string;
+  dishes: Array<string>;
+  productCategoryType: number;
+  productItemId: number;
+  productPrice: string;
 }
 
 const ProductDialog = forwardRef((props, ref) => {
-    const [size, setSize] = useState(16);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [portion, setPortion] = useState(1);
-    const [productInfo, setProductInfo] = useState<Product>({
-        productName: "",
-        dishes: [],
-        productCategoryType: 0,
-        productItemId: 0,
-        productPrice: "",
+  const [size, setSize] = useState(16);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [portion, setPortion] = useState(1);
+  const [productInfo, setProductInfo] = useState<Product>({
+    productName: "",
+    dishes: [],
+    productCategoryType: 0,
+    productItemId: 0,
+    productPrice: "",
+  });
+  // const [state, setState] = useState();
+
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setState({
+  //     // ...state,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
+
+  useImperativeHandle(ref, () => ({
+    productDialogOpen(props: Product) {
+      setProductInfo(props);
+      setOpen(true);
+    },
+
+    productDialogClose() {
+      handleClose();
+    },
+  }));
+  const handleClose = () => {
+    setOpen(false);
+    setPortion(1);
+    setProductInfo({
+      productName: "",
+      dishes: [],
+      productCategoryType: 0,
+      productItemId: 0,
+      productPrice: "",
     });
-    // const [state, setState] = useState();
+  };
 
-    // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //   setState({
-    //     // ...state,
-    //     [event.target.name]: event.target.checked,
-    //   });
-    // };
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-    useImperativeHandle(ref, () => ({
-        productDialogOpen(props: Product) {
-            setProductInfo(props);
-            setOpen(true);
-        },
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
 
-        productDialogClose() {
-            handleClose();
-        },
-    }));
-    const handleClose = () => {
-        setOpen(false);
-        setPortion(1);
-        setProductInfo({
-            productName: "",
-            dishes: [],
-            productCategoryType: 0,
-            productItemId: 0,
-            productPrice: "",
-        });
-    };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
+  const descriptionElementRef = React.useRef<HTMLElement>(null);
+  const formGroupRef = React.useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
+  useEffect(() => {
+    if (formGroupRef.current) {
+      Array.prototype.slice
+        .call(formGroupRef.current.children)
+        .map((item) => console.log(item.id));
+    }
+  });
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const descriptionElementRef = React.useRef<HTMLElement>(null);
-    const formGroupRef = React.useRef<HTMLElement>(null);
-    useEffect(() => {
-        if (open) {
-            const {current: descriptionElement} = descriptionElementRef;
-            if (descriptionElement !== null) {
-                descriptionElement.focus();
-            }
-        }
-    }, [open]);
-
-    useEffect(() => {
-        if (formGroupRef.current) {
-            Array.prototype.slice
-                .call(formGroupRef.current.children)
-                .map((item) => console.log(item.id));
-        }
-    });
-
-    return (
-        <antd.Modal title={productInfo.productName} visible={open} onOk={handleClose} onCancel={handleClose} centered cancelText="取消" okText="下单">
-            <DialogContentText tabIndex={-10}>
-                基础单价：{productInfo.productPrice} 元/份
-            </DialogContentText>
-            <br/>
-            <Box sx={{display: "flex"}}>
-                <antd.Button type="primary" size="middle" disabled={portion <= 1}
-                             onClick={() => setPortion((pre) => pre - 1)}>-
-                </antd.Button>
-                <Typography align="center" sx={{flexGrow: 1}}>
-                    {portion} 份
-                </Typography>
-                {/* <Button onClick={() => setPortion((pre) => pre + 1)} sx={{ width: "0.5rem", height: "0.5rem" }} color="info" variant="outlined">+</Button> */}
-                <antd.Button type="primary" size="middle" onClick={() => setPortion((pre) => pre + 1)}>+</antd.Button>
-            </Box>
-            {productInfo.dishes.length > 0 && (
-                <Box
-                    maxHeight={240}
-                    id="scroll-dialog"
-                    ref={descriptionElementRef}
-                    tabIndex={-1}
-                >
-                    <FormControl
-                        required
-                        // error={error}
-                        component="fieldset"
-                        sx={{ m: 3 }}
-                        variant="standard"
-                    >
-                        <FormLabel component="legend">多选二</FormLabel>
-                        <FormGroup row={true} ref={formGroupRef}>
-                            {productInfo.dishes.map((dish: any) => (
-                                <FormControlLabel
-                                    key={dish.disheItemId}
-                                    id={dish.disheItemId}
-                                    control={
-                                        <Checkbox
-                                            // checked={gilad}
-                                            // onChange={handleChange}
-                                            name={dish.disheName}
-                                        />
-                                        //     <antd.Button size="large">{dish.disheName}</antd.Button>
-                                    }
-                                    label={dish.disheName}
-                                />
-                            ))}
-                        </FormGroup>
-                    </FormControl>
-                </Box>
-            )}
-        </antd.Modal>
-    );
+  return (
+    <antd.Modal
+      title={productInfo.productName}
+      visible={open}
+      onOk={handleClose}
+      onCancel={handleClose}
+      centered
+      cancelText="取消"
+      okText="下单"
+    >
+      <DialogContentText tabIndex={-10}>
+        基础单价：{productInfo.productPrice} 元/份
+      </DialogContentText>
+      <br />
+      <Box sx={{ display: "flex" }}>
+        <antd.Button
+          type="primary"
+          size="middle"
+          disabled={portion <= 1}
+          onClick={() => setPortion((pre) => pre - 1)}
+        >
+          -
+        </antd.Button>
+        <Typography align="center" sx={{ flexGrow: 1 }}>
+          {portion} 份
+        </Typography>
+        {/* <Button onClick={() => setPortion((pre) => pre + 1)} sx={{ width: "0.5rem", height: "0.5rem" }} color="info" variant="outlined">+</Button> */}
+        <antd.Button
+          type="primary"
+          size="middle"
+          onClick={() => setPortion((pre) => pre + 1)}
+        >
+          +
+        </antd.Button>
+      </Box>
+      {productInfo.dishes.length > 0 && (
+        <Box
+          maxHeight={240}
+          id="scroll-dialog"
+          ref={descriptionElementRef}
+          tabIndex={-1}
+        >
+          <FormControl
+            required
+            // error={error}
+            component="fieldset"
+            sx={{ m: 3 }}
+            variant="standard"
+          >
+            <FormLabel component="legend">多选二</FormLabel>
+            <FormGroup row={true} ref={formGroupRef}>
+              {productInfo.dishes.map((dish: any) => (
+                <FormControlLabel
+                  key={dish.disheItemId}
+                  id={dish.disheItemId}
+                  control={
+                    <Checkbox
+                      // checked={gilad}
+                      // onChange={handleChange}
+                      name={dish.disheName}
+                    />
+                    //     <antd.Button size="large">{dish.disheName}</antd.Button>
+                  }
+                  label={dish.disheName}
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        </Box>
+      )}
+    </antd.Modal>
+  );
 });
 
 export default ProductDialog;
