@@ -10,6 +10,7 @@ import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import DiningOutlined from "@mui/icons-material/DiningOutlined";
 import RestoreIcon from "@mui/icons-material/Restore";
+import OpenTableStage from "../components/OpenTableStage";
 import {useLocation} from "react-router-dom";
 import type {DrawerProps, RadioChangeEvent} from 'antd';
 import * as antd from 'antd';
@@ -38,12 +39,14 @@ import {useRecoilState} from "recoil";
 import menuState from "../state/menuState";
 import tableState from "../state/tableState";
 import {TabPanel} from "@mui/lab";
+import ProductDialog from "../components/ProductDialog";
 
 const AppLayout = () => {
     const profileMenuId = "primary-account-menu";
     const location = useLocation();
     const loginOutActions = useLoginOutActions();
     const tableAction = useTableAction();
+    const openTableStage = useRef<any>();
     const [anchorProfileMenu, setAnchorProfileMenu] =
         React.useState<null | HTMLElement>(null);
     const isProfileMenuOpen = Boolean(anchorProfileMenu);
@@ -288,6 +291,16 @@ const AppLayout = () => {
                                             }}
                                         type="primary"
                                         size="large"
+                                        // 1.如果isLock为1 即已经开台 走调购物车逻辑
+                                        // 2.如果isLock为0 即未开台 走调开台逻辑 即锁定该桌号
+                                        onClick={item.isLock === 1 ?
+                                            () => {
+                                            // TODO
+                                            }
+                                            : () => {
+                                                openTableStage.current.tableStageOpen(item);
+                                            }}
+
                                     >{item.tableNum}</antd.Button>
                                     // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
                                 ))}
@@ -336,6 +349,7 @@ const AppLayout = () => {
                     />
                 </BottomNavigation>
             </Paper>
+            <OpenTableStage ref={openTableStage}/>
         </Box>
     );
 };

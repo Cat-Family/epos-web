@@ -9,8 +9,8 @@ import { message } from "antd";
 // import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
-// export const baseURL: string = "http://127.0.0.1:8083";
-export const baseURL: string = "http://81.70.97.93";
+export const baseURL: string = "http://127.0.0.1:8083";
+// export const baseURL: string = "http://81.70.97.93";
 
 const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();
@@ -118,6 +118,10 @@ axiosInstance.interceptors.response.use(
     }
 
     if (responseConfig.data.code === 10000) {
+      message.error(responseConfig.data.message);
+    }
+
+    if (responseConfig.data.code === 400) {
       message.error(responseConfig.data.message);
     }
 
