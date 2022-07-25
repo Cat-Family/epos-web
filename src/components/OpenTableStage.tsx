@@ -3,11 +3,12 @@ import React, {
     forwardRef,
     useEffect,
     useImperativeHandle,
-    useMemo,
+    useMemo, useRef,
     useState,
 } from "react";
 
 import useTableActions from "../actions/useTableActions";
+import TableDrawer from "./TableDrawer";
 import * as antd from "antd";
 import {Box, Typography} from "@mui/material";
 
@@ -19,14 +20,16 @@ interface TableMsg {
 const OpenTableStage = forwardRef((props, ref) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [maskClosable, setMaskClosable] = useState(false);
+    const [maskClosable, setMaskClosable] = useState(true);
     const [open, setOpen] = useState(false);
     const [portion, setPortion] = useState(1);
+    const [tableNum, setTableNum] = useState("");
     const [tableMsg, setTableMsg] = useState<TableMsg>({
         tableNum: "",
         persons:""
     });
 
+    const tableDrawer = useRef<any>();
     const tableActions = useTableActions();
 
     const onOpenStage = async () => {
@@ -36,8 +39,12 @@ const OpenTableStage = forwardRef((props, ref) => {
             tableMsg.tableNum as string,
             personsStr as string
         );
+        setTableNum(tableMsg.tableNum)
         setModalVisible(false);
         setConfirmLoading(false);
+        // TODO
+        // 当点击确定开台成功后，桌号抽屉应当关闭，并把桌位号切换至开台的号码 此处不成功
+        tableDrawer.current.tableDrawerClose();
     };
 
     useImperativeHandle(ref, () => ({
@@ -46,9 +53,13 @@ const OpenTableStage = forwardRef((props, ref) => {
             setModalVisible(true);
         },
 
-        productDialogClose() {
+        tableStageClose() {
             handleClose();
         },
+
+        passTableNum() {
+            console.log(tableNum)
+        }
     }));
     const handleClose = () => {
         setModalVisible(false)
@@ -111,7 +122,9 @@ const OpenTableStage = forwardRef((props, ref) => {
                     +
                 </antd.Button>
             </Box>
+            <TableDrawer ref={tableDrawer}/>
         </antd.Modal>
+
     );
 });
 

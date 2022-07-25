@@ -12,6 +12,7 @@ import { message } from "antd";
 // export const baseURL: string = "http://127.0.0.1:8083";
 export const baseURL: string = "http://81.70.97.93";
 
+
 const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();
 
@@ -59,9 +60,20 @@ axiosInstance.interceptors.response.use(
         localStorage.setItem("refreshToken", refreshToken as string);
         localStorage.setItem("accessToken", accessToken as string);
         localStorage.setItem("clientId", clientId as string);
+      } else {
+        if (
+            responseConfig.config.method !== "get"
+        ) {
+          message.success(responseConfig.data.message)
+        }
       }
       return responseConfig;
     }
+
+    if (responseConfig.data.code === 400) {
+      message.error(responseConfig.data.message)
+    }
+
     if (responseConfig.data.code === 403 && refreshToken && clientId) {
       // refresh Token interceptor
       try {
@@ -123,14 +135,6 @@ axiosInstance.interceptors.response.use(
     // if (responseConfig.data.code === 10000) {
     //   message.error(responseConfig.data.message);
     // }
-
-    if (responseConfig.data.code === 400) {
-      message.error(responseConfig.data.message);
-    }
-
-    if (responseConfig.data.code === 202) {
-      message.success(responseConfig.data.message);
-    }
 
     return Promise.reject(responseConfig.data);
   },

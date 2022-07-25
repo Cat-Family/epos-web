@@ -37,7 +37,6 @@ const useTableAction = () => {
                 persons
             });
         } catch (error: any) {
-            message.error(error.message);
             return error;
         }
     };

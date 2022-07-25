@@ -34,8 +34,12 @@ const TableDrawer = forwardRef((props, ref) => {
             setVisible(true);
         },
 
-        productDialogClose() {
+        tableDrawerClose() {
+            //TODO
+            //开台确认后 此行执行 但抽屉还是可见
+            // setVisible(false);
             onClose();
+            //false
         },
     }));
 

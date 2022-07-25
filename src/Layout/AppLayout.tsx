@@ -201,6 +201,8 @@ const AppLayout = () => {
 
                     <Box sx={{flexGrow: 1}}/>
 
+                    {/*TODO*/}
+                    {/*这里的1号，需要展示为用户开台成功之后的桌号或者点击已经开台桌号*/}
                     {location.pathname === "/" && (
                         <>
                             <Button sx={{fontSize: "1.2rem"}} color="inherit"  onClick={() => {
