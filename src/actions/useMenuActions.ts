@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const useMenuAction = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -20,7 +21,11 @@ const useMenuAction = () => {
 
       return res;
     } catch (error: any) {
-      enqueueSnackbar(error.message, { variant: "error" });
+      // enqueueSnackbar(error.message, { variant: "error" });
+      message.error(error.message);
+      if (error.code === 401) {
+        navigate("/users/signin", { replace: true });
+      }
       return error;
     }
   };

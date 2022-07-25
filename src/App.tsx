@@ -10,7 +10,7 @@ import { SnackbarProvider } from "notistack";
 
 const App = () => {
   return (
-    <SnackbarProvider>
+    <SnackbarProvider autoHideDuration={2000} dense>
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<HomePage />} />
