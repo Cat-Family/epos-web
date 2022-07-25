@@ -3,23 +3,18 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useState,
 } from "react";
-import Button from "@mui/material/Button";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
+
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Typography } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
 import * as antd from "antd";
+import { withCookies } from "react-cookie"
 
 interface Product {
   productName: string;
@@ -30,8 +25,12 @@ interface Product {
 }
 
 const ProductDialog = forwardRef((props, ref) => {
+
+  const dishesArr: number[] = [];
+
   const [size, setSize] = useState(16);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [checkBoxDisable, setCheckBoxDisable] = useState(false);
   const [open, setOpen] = useState(false);
   const [portion, setPortion] = useState(1);
   const [productInfo, setProductInfo] = useState<Product>({
@@ -97,9 +96,9 @@ const ProductDialog = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (formGroupRef.current) {
-      Array.prototype.slice
-        .call(formGroupRef.current.children)
-        .map((item) => console.log(item.id));
+      // Array.prototype.slice
+      //   .call(formGroupRef.current.children)
+      //   .map((item) => console.log(item.id));
     }
   });
 
@@ -160,8 +159,8 @@ const ProductDialog = forwardRef((props, ref) => {
                   id={dish.disheItemId}
                   control={
                     <Checkbox
-                      // checked={gilad}
-                      // onChange={handleChange}
+                        // onChange={handleChange}
+                        disabled={checkBoxDisable}
                       name={dish.disheName}
                     />
                     //     <antd.Button size="large">{dish.disheName}</antd.Button>

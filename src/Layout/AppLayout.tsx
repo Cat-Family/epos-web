@@ -79,42 +79,35 @@ const AppLayout = () => {
   const queryTable = async () => {
     const a = await tableAction.getTables();
   };
+    useLayoutEffect(() => {
+        tableAction.getTables();
+    }, []);
 
-  const showDrawer = () => {
-    queryTable();
-    setVisible(true);
-  };
+    useLayoutEffect(() => {
+        if (table[0]?.categoryType) {
+            setValue(table[0].categoryType.toString());
+        }
+    }, [table]);
 
-  useLayoutEffect(() => {
-    tableAction.getTables();
-  }, []);
+    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorProfileMenu(event.currentTarget);
+    };
 
-  useLayoutEffect(() => {
-    if (table[0]?.categoryType) {
-      setValue(table[0].categoryType.toString());
-    }
-  }, [table]);
+    const handleProfileMenuClose = () => {
+        setAnchorProfileMenu(null);
+    };
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorProfileMenu(event.currentTarget);
-  };
-
-  const handleProfileMenuClose = () => {
-    setAnchorProfileMenu(null);
-  };
-
-  const [value, setValue] = React.useState(
-    location.pathname === "/"
-      ? 0
-      : location.pathname === "/orders"
-      ? 1
-      : location.pathname === "/bills"
-      ? 2
-      : 3
-  );
-  const ref = React.useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-
+    const [value, setValue] = React.useState(
+        location.pathname === "/"
+            ? 0
+            : location.pathname === "/orders"
+            ? 1
+            : location.pathname === "/bills"
+                ? 2
+                : 3
+    );
+    const ref = React.useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -165,42 +158,40 @@ const AppLayout = () => {
       <MenuItem>
         <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
       </MenuItem>
-
-      <MenuItem
-        onClick={handleProfileMenuClose}
-        component={Link}
-        to="/settings"
-      >
-        <ListItemIcon>
-          <Settings fontSize="small" />
-        </ListItemIcon>
-        Settings
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          logout();
-        }}
-        component={Link}
-        to={"/users/signin"}
-      >
-        <ListItemIcon>
-          <Logout fontSize="small" />
-        </ListItemIcon>
-        logout
-      </MenuItem>
-      <Divider />
-      <MenuItem
-        sx={{ display: "flex", justifyContent: "space-between" }}
-        onClick={() => {
-          handleProfileMenuClose();
-        }}
-      >
-        <ListItemIcon>
-          <Brightness7Outlined fontSize="small" />
-          {/* <Brightness4Outlined fontSize="small" /> */}
-        </ListItemIcon>
-        <Typography sx={{ flexGrow: "1" }}>Appearance</Typography>
-
+            <MenuItem
+                onClick={handleProfileMenuClose}
+                component={Link}
+                to="/settings"
+            >
+                <ListItemIcon>
+                    <Settings fontSize="small"/>
+                </ListItemIcon>
+                Settings
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    logout();
+                }}
+                component={Link}
+                to={"/users/signin"}
+            >
+                <ListItemIcon>
+                    <Logout fontSize="small"/>
+                </ListItemIcon>
+                logout
+            </MenuItem>
+            <Divider/>
+            <MenuItem
+                sx={{display: "flex", justifyContent: "space-between"}}
+                onClick={() => {
+                    handleProfileMenuClose();
+                }}
+            >
+                <ListItemIcon>
+                    <Brightness7Outlined fontSize="small"/>
+                    {/* <Brightness4Outlined fontSize="small" /> */}
+                </ListItemIcon>
+                <Typography sx={{flexGrow: "1"}}>Appearance</Typography>
         <ListItemIcon sx={{ justifyContent: "end" }}>
           <ArrowForwardIosOutlined fontSize="small" />
         </ListItemIcon>
@@ -234,8 +225,9 @@ const AppLayout = () => {
             />
           </Link>
 
-          <Box sx={{ flexGrow: 1 }} />
-
+                    <Box sx={{flexGrow: 1}}/>
+          {/*TODO*/}
+          {/*这里的1号，需要展示为用户开台成功之后的桌号或者点击已经开台桌号*/}
           {location.pathname === "/" && (
             <>
               <Button
@@ -252,34 +244,39 @@ const AppLayout = () => {
             </>
           )}
 
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={profileMenuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-          >
-            <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
-          </IconButton>
-        </Toolbar>
-        {renderProfileMenu}
-      </AppBar>
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-controls={profileMenuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
+                    </IconButton>
+                </Toolbar>
+                {renderProfileMenu}
+            </AppBar>
 
-      <Toolbar />
+            <Toolbar/>
 
-      <Box
-        component="main"
-        sx={{
-          display: "flex",
-          flexGrow: 1,
-          overflow: "auto",
-        }}
-      >
-        <Outlet />
-      </Box>
-
+            <Box
+                component="main"
+                sx={{
+                    display: "flex",
+                    flexGrow: 1,
+                    overflow: "auto",
+                }}
+            >
+                <Outlet/>
+            </Box>
+            <div
+                style={{backgroundColor: '#333'}}
+                className={'center'}
+            >
+            </div>
+            <BottomNavigation/>
       <antd.Drawer
         title="桌号选择"
         placement={placement}

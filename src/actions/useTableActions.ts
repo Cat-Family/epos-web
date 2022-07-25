@@ -9,10 +9,7 @@ const useTableAction = () => {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     const [table, setTable] = useRecoilState(tableState);
-    /**
-     *
-     * @returns menu
-     */
+
     const getTables = async () => {
         try {
             const res = await axiosInstance.get("/qy/api/tables/queryTables");
@@ -21,7 +18,6 @@ const useTableAction = () => {
 
             return res;
         } catch (error: any) {
-            message.error(error.message);
             if (error.code === 401) {
                 navigate("/users/signin", { replace: true });
             }
@@ -29,7 +25,22 @@ const useTableAction = () => {
         }
     };
 
-    return { getTables };
+
+    const openStage = async (
+        tableNum: string,
+        persons: string,
+    ) => {
+        try {
+            await axiosInstance.post("/qy/api/tables/openStage",
+                {
+                tableNum,
+                persons
+            });
+        } catch (error: any) {
+            return error;
+        }
+    };
+    return { getTables,openStage };
 };
 
 export default useTableAction;
