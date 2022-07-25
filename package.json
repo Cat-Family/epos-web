@@ -32,7 +32,7 @@
   "devDependencies": {
     "@import-meta-env/cli": "^0.1.7",
     "@import-meta-env/unplugin": "^0.1.8",
-    "@tauri-apps/cli": "^1.0.4",
+    "@tauri-apps/cli": "^1.0.5",
     "@types/argon2-browser": "^1.18.1",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
