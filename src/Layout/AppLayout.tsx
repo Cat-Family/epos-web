@@ -1,18 +1,17 @@
-import React, {useLayoutEffect, useRef, useState} from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import { Outlet, useNavigate } from "react-router";
-import AppBar from "@mui/material/AppBar/AppBar";
 import { Link } from "react-router-dom";
 import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import DiningOutlined from "@mui/icons-material/DiningOutlined";
 import RestoreIcon from "@mui/icons-material/Restore";
 import { useLocation } from "react-router-dom";
-import type { DrawerProps, RadioChangeEvent } from 'antd';
-import * as antd from 'antd';
+import type { DrawerProps, RadioChangeEvent } from "antd";
+import * as antd from "antd";
 import useLoginOutActions from "../actions/useUserActions";
 import useTableAction from "../actions/useTableActions";
 import {
@@ -22,22 +21,35 @@ import {
   GTranslateOutlined,
   Logout,
   Settings,
+  SwapHorizOutlined,
 } from "@mui/icons-material";
-import {
-  IconButton,
-  Toolbar,
-  Typography,
-  Avatar,
-  MenuItem,
-  Menu,
-  ListItemIcon,
-  Divider,
-  Button,
-} from "@mui/material";
-import {useRecoilState} from "recoil";
+import { Avatar, MenuItem, Menu, ListItemIcon } from "@mui/material";
+import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import tableState from "../state/tableState";
-import {TabPanel} from "@mui/lab";
+import { TabPanel } from "@mui/lab";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -48,9 +60,9 @@ const AppLayout = () => {
     React.useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
   const [visible, setVisible] = useState(false);
-  const [disable,setDisable] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [table, setTable] = useRecoilState<any>(tableState);
-  const [placement, setPlacement] = useState<DrawerProps['placement']>('top');
+  const [placement, setPlacement] = useState<DrawerProps["placement"]>("top");
 
   const onClose = () => {
     setVisible(false);
@@ -66,9 +78,7 @@ const AppLayout = () => {
 
   const queryTable = async () => {
     const a = await tableAction.getTables();
-    console.log(a)
-  }
-
+  };
 
   const showDrawer = () => {
     queryTable();
@@ -104,6 +114,16 @@ const AppLayout = () => {
   );
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const renderProfileMenu = (
     <Menu
@@ -205,24 +225,29 @@ const AppLayout = () => {
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <AppBar position="fixed">
         <Toolbar>
-          {/* <Link to="/">
+          <Link to="/">
             <img
               className="logo"
               style={{ height: 32, width: 32 }}
               src="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
               alt="logo"
             />
-          </Link> */}
-
+          </Link>
 
           <Box sx={{ flexGrow: 1 }} />
 
           {location.pathname === "/" && (
             <>
-              <Button sx={{ fontSize: "1.2rem" }} color="inherit" onClick={showDrawer}>
+              <Button
+                sx={{ fontSize: "1.2rem" }}
+                color="inherit"
+                onClick={handleClickOpen}
+              >
                 1号
               </Button>
-
+              <IconButton color="inherit" onClick={showDrawer}>
+                <SwapHorizOutlined fontSize="small" />
+              </IconButton>
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
@@ -264,17 +289,17 @@ const AppLayout = () => {
         key={placement}
         height="200"
       >
-
         {/*<Box sx={{display: "flex"}}>*/}
         <antd.Space size={[18, 22]} wrap>
           {table?.map((item: any) => (
-              <antd.Button type="primary" size="large" shape="circle">{item.tableNum}</antd.Button>
-              // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
+            <antd.Button type="primary" size="large" shape="circle">
+              {item.tableNum}
+            </antd.Button>
+            // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
           ))}
         </antd.Space>
 
         {/*</Box>*/}
-
       </antd.Drawer>
 
       <BottomNavigation />
@@ -311,6 +336,43 @@ const AppLayout = () => {
           />
         </BottomNavigation>
       </Paper>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Sound
+            </Typography>
+            <Button autoFocus color="inherit" onClick={handleClose}>
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <List>
+          <ListItem button>
+            <ListItemText primary="Phone ringtone" secondary="Titania" />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemText
+              primary="Default notification ringtone"
+              secondary="Tethys"
+            />
+          </ListItem>
+        </List>
+      </Dialog>
     </Box>
   );
 };
