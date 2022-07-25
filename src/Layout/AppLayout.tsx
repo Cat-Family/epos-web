@@ -10,15 +10,12 @@ import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import DiningOutlined from "@mui/icons-material/DiningOutlined";
 import RestoreIcon from "@mui/icons-material/Restore";
-import OpenTableStage from "../components/OpenTableStage";
 import {useLocation} from "react-router-dom";
 import type {DrawerProps, RadioChangeEvent} from 'antd';
-import * as antd from 'antd';
 import useLoginOutActions from "../actions/useUserActions";
 import useTableAction from "../actions/useTableActions";
 import {
     ArrowForwardIosOutlined,
-    Brightness4Outlined,
     Brightness7Outlined,
     GTranslateOutlined,
     Logout,
@@ -36,10 +33,8 @@ import {
     Button,
 } from "@mui/material";
 import {useRecoilState} from "recoil";
-import menuState from "../state/menuState";
 import tableState from "../state/tableState";
-import {TabPanel} from "@mui/lab";
-import ProductDialog from "../components/ProductDialog";
+import TableDrawer from "../components/TableDrawer";
 
 const AppLayout = () => {
     const profileMenuId = "primary-account-menu";
@@ -47,21 +42,13 @@ const AppLayout = () => {
     const loginOutActions = useLoginOutActions();
     const tableAction = useTableAction();
     const openTableStage = useRef<any>();
+    const tableDrawer = useRef<any>();
     const [anchorProfileMenu, setAnchorProfileMenu] =
         React.useState<null | HTMLElement>(null);
     const isProfileMenuOpen = Boolean(anchorProfileMenu);
     const [visible, setVisible] = useState(false);
-    const [disable, setDisable] = useState(false);
     const [table, setTable] = useRecoilState<any>(tableState);
     const [placement, setPlacement] = useState<DrawerProps['placement']>('top');
-
-    const onClose = () => {
-        setVisible(false);
-    };
-
-    const onChange = (e: RadioChangeEvent) => {
-        setPlacement(e.target.value);
-    };
 
     const logout = async () => {
         await loginOutActions.loginOut();
@@ -71,11 +58,6 @@ const AppLayout = () => {
         await tableAction.getTables();
     }
 
-
-    const showDrawer = () => {
-        queryTable();
-        setVisible(true);
-    };
 
     useLayoutEffect(() => {
         tableAction.getTables();
@@ -221,7 +203,9 @@ const AppLayout = () => {
 
                     {location.pathname === "/" && (
                         <>
-                            <Button sx={{fontSize: "1.2rem"}} color="inherit" onClick={showDrawer}>
+                            <Button sx={{fontSize: "1.2rem"}} color="inherit"  onClick={() => {
+                                tableDrawer.current.tableDrawerOpen();
+                            }}>
                                 1号
                             </Button>
 
@@ -260,60 +244,6 @@ const AppLayout = () => {
                 style={{backgroundColor: '#333'}}
                 className={'center'}
             >
-                <antd.Drawer
-                    title="桌号选择"
-                    placement={placement}
-                    closable={false}
-                    onClose={onClose}
-                    visible={visible}
-                    key={placement}
-                    height="60%"
-                    contentWrapperStyle={{justifyContent: 'center'}}
-                >
-
-                    {/*<Box sx={{display: "flex"}}>*/}
-
-                    <antd.Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-
-                        <antd.Col span={24}>
-                            <antd.Space size={[10, 20]} wrap>
-                                {table?.map((item: any) => (
-                                    <antd.Button
-                                        style={item.isLock === 0 ?
-                                            {
-                                                color: "rgb(24,144,255)",
-                                                backgroundColor: "white",
-                                                width: "62.4px",
-                                                height: "62.4px",
-                                            } : {
-                                                width: "62.4px",
-                                                height: "62.4px",
-                                            }}
-                                        type="primary"
-                                        size="large"
-                                        // 1.如果isLock为1 即已经开台 走调购物车逻辑
-                                        // 2.如果isLock为0 即未开台 走调开台逻辑 即锁定该桌号
-                                        onClick={item.isLock === 1 ?
-                                            () => {
-                                            // TODO
-                                            }
-                                            : () => {
-                                                openTableStage.current.tableStageOpen(item);
-                                            }}
-
-                                    >{item.tableNum}</antd.Button>
-                                    // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
-                                ))}
-                            </antd.Space>
-
-                        </antd.Col>
-
-                    </antd.Row>
-
-
-                    {/*</Box>*/}
-
-                </antd.Drawer>
             </div>
             <BottomNavigation/>
 
@@ -349,7 +279,7 @@ const AppLayout = () => {
                     />
                 </BottomNavigation>
             </Paper>
-            <OpenTableStage ref={openTableStage}/>
+            <TableDrawer ref={tableDrawer}/>
         </Box>
     );
 };

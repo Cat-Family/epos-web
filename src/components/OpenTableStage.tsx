@@ -19,6 +19,7 @@ interface TableMsg {
 const OpenTableStage = forwardRef((props, ref) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const [maskClosable, setMaskClosable] = useState(false);
     const [open, setOpen] = useState(false);
     const [portion, setPortion] = useState(1);
     const [tableMsg, setTableMsg] = useState<TableMsg>({
@@ -86,6 +87,7 @@ const OpenTableStage = forwardRef((props, ref) => {
             centered
             visible={modalVisible}
             confirmLoading={confirmLoading}
+            maskClosable={maskClosable}
             onOk={() => onOpenStage()}
             onCancel={() => handleClose()}
         >

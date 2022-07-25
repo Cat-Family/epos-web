@@ -31,7 +31,8 @@ const useTableAction = () => {
         persons: string,
     ) => {
         try {
-            await axiosInstance.post("/qy/api/tables/openStage", {
+            await axiosInstance.post("/qy/api/tables/openStage",
+                {
                 tableNum,
                 persons
             });
