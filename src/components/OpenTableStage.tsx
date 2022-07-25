@@ -13,6 +13,7 @@ import {Box, Typography} from "@mui/material";
 
 interface TableMsg {
     tableNum: string;
+    persons: string
 }
 
 const OpenTableStage = forwardRef((props, ref) => {
@@ -21,17 +22,18 @@ const OpenTableStage = forwardRef((props, ref) => {
     const [open, setOpen] = useState(false);
     const [portion, setPortion] = useState(1);
     const [tableMsg, setTableMsg] = useState<TableMsg>({
-        tableNum: ""
+        tableNum: "",
+        persons:""
     });
 
     const tableActions = useTableActions();
 
-
     const onOpenStage = async () => {
         setConfirmLoading(true);
+        const personsStr = String(portion);
         await tableActions.openStage(
             tableMsg.tableNum as string,
-            "40"
+            personsStr as string
         );
         setModalVisible(false);
         setConfirmLoading(false);
@@ -48,10 +50,11 @@ const OpenTableStage = forwardRef((props, ref) => {
         },
     }));
     const handleClose = () => {
-
+        setModalVisible(false)
         setPortion(1);
         setTableMsg({
-            tableNum: ""
+            tableNum: "",
+            persons: ""
         });
     };
 
@@ -84,7 +87,7 @@ const OpenTableStage = forwardRef((props, ref) => {
             visible={modalVisible}
             confirmLoading={confirmLoading}
             onOk={() => onOpenStage()}
-            onCancel={() => setModalVisible(false)}
+            onCancel={() => handleClose()}
         >
             <Box sx={{display: "flex"}}>
                 <antd.Button

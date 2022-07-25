@@ -39,8 +39,6 @@ const userActions = () => {
       });
       return res;
     } catch (error: any) {
-      // enqueueSnackbar(error.message, { variant: "error",anchorOrigin:{horizontal: "center", vertical: "top"}});
-      message.error(error.message);
       return error;
     }
   };
@@ -54,7 +52,6 @@ const userActions = () => {
       localStorage.removeItem("clientId");
     } catch (error: any) {
       // enqueueSnackbar(error.message, { variant: "error",anchorOrigin:{horizontal: "center", vertical: "top"}});
-      message.error(error.message);
       return error;
     }
   };

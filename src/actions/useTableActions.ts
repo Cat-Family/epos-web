@@ -18,7 +18,6 @@ const useTableAction = () => {
 
             return res;
         } catch (error: any) {
-            message.error(error.message);
             if (error.code === 401) {
                 navigate("/users/signin", { replace: true });
             }

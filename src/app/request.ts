@@ -117,12 +117,16 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(responseConfig.data);
     }
 
-    if (responseConfig.data.code === 10000) {
-      message.error(responseConfig.data.message);
-    }
+    // if (responseConfig.data.code === 10000) {
+    //   message.error(responseConfig.data.message);
+    // }
 
     if (responseConfig.data.code === 400) {
       message.error(responseConfig.data.message);
+    }
+
+    if (responseConfig.data.code === 202) {
+      message.success(responseConfig.data.message);
     }
 
     return Promise.reject(responseConfig.data);
