@@ -62,6 +62,7 @@ const OpenTableStage = forwardRef((props, ref) => {
         }
     }));
     const handleClose = () => {
+        tableDrawer.current.tableDrawerOpen();
         setModalVisible(false)
         setPortion(1);
         setTableMsg({

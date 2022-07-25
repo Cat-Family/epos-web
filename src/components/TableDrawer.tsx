@@ -99,6 +99,7 @@ const TableDrawer = forwardRef((props, ref) => {
                                     }
                                     : () => {
                                         openTableStage.current.tableStageOpen(item);
+                                        onClose()
                                     }}
 
                             >{item.tableNum}</antd.Button>

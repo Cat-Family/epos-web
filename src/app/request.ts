@@ -12,7 +12,6 @@ import { message } from "antd";
 // export const baseURL: string = "http://127.0.0.1:8083";
 export const baseURL: string = "http://81.70.97.93";
 
-
 const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();
 
@@ -25,8 +24,8 @@ const axiosInstance: AxiosInstance = axios.create({
   timeout: 6000,
   withCredentials: true,
   headers:{
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json;charset=UTF-8"
+  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -43,6 +42,7 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(err);
   }
 );
+
 
 axiosInstance.interceptors.response.use(
   async (responseConfig: AxiosResponse) => {
@@ -64,7 +64,15 @@ axiosInstance.interceptors.response.use(
         if (
             responseConfig.config.method !== "get"
         ) {
-          message.success(responseConfig.data.message)
+          message.success(
+              {
+                content: responseConfig.data.message,
+                style: {
+                  marginTop: '7vh',
+                },
+              }
+        )
+
         }
       }
       return responseConfig;
@@ -132,9 +140,16 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(responseConfig.data);
     }
 
-    // if (responseConfig.data.code === 10000) {
-    //   message.error(responseConfig.data.message);
-    // }
+    if (responseConfig.data.code === 400) {
+      message.error(
+          {
+            content: responseConfig.data.message,
+            style: {
+              marginTop: '7vh',
+            },
+          }
+      )
+    }
 
     return Promise.reject(responseConfig.data);
   },
