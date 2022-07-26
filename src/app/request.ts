@@ -141,14 +141,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (responseConfig.data.code === 400) {
-      message.error(
-          {
-            content: responseConfig.data.message,
-            style: {
-              marginTop: '7vh',
-            },
-          }
-      )
+      message.error(responseConfig.data.message)
     }
 
     return Promise.reject(responseConfig.data);
