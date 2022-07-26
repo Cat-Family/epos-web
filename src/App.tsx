@@ -43,21 +43,12 @@ import {
   ThemeCssVar as JoyThemeCssVar,
 } from "@mui/joy/styles";
 
-// Material UI components
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 
-// Icons
 import DarkMode from "@mui/icons-material/DarkMode";
 import LightMode from "@mui/icons-material/LightMode";
 
-// Joy UI components
-import AspectRatio from "@mui/joy/AspectRatio";
-import Box from "@mui/joy/Box";
-import JoyButton from "@mui/joy/Button";
+
 import IconButton from "@mui/joy/IconButton";
-import Card from "@mui/joy/Card";
-import Typography from "@mui/joy/Typography";
 import { CommonColors } from "@mui/material/styles/createPalette";
 import { TypeBackground } from "@mui/material";
 
