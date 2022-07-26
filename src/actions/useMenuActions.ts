@@ -22,9 +22,6 @@ const useMenuAction = () => {
       return res;
     } catch (error: any) {
       // enqueueSnackbar(error.message, { variant: "error" });
-      if (error.code === 401) {
-        navigate("/users/signin", { replace: true });
-      }
       return error;
     }
   };

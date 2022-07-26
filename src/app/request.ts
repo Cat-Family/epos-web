@@ -23,8 +23,8 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   timeout: 6000,
   withCredentials: true,
-  headers:{
-    "Content-Type": "application/json;charset=UTF-8"
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8",
   },
 });
 
@@ -43,7 +43,6 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-
 axiosInstance.interceptors.response.use(
   async (responseConfig: AxiosResponse) => {
     if (responseConfig.data.code === 200) {
@@ -56,40 +55,24 @@ axiosInstance.interceptors.response.use(
         refreshToken = responseConfig.data.data.refreshToken;
         accessToken = responseConfig.data.data.accessToken;
         clientId = responseConfig.data.data.clientId;
-
         localStorage.setItem("refreshToken", refreshToken as string);
         localStorage.setItem("accessToken", accessToken as string);
         localStorage.setItem("clientId", clientId as string);
-      } else {
-        if (
-            responseConfig.config.method !== "get"
-        ) {
-          message.success(
-              {
-                content: responseConfig.data.message,
-                style: {
-                  marginTop: '7vh',
-                },
-              }
-        )
-
-        }
+        return responseConfig;
       }
       return responseConfig;
     }
 
     if (responseConfig.data.code === 400) {
-      message.error(responseConfig.data.message)
+      message.error(responseConfig.data.message);
     }
 
     if (responseConfig.data.code === 403 && refreshToken && clientId) {
-      // refresh Token interceptor
       try {
         encrypt.setPublicKey(PUBLICKEY);
-
         const sign = encrypt.encrypt(`${clientId},${refreshToken}`);
-        const res = await axios.post(
-          `${baseURL}/qy/api/user/session/refresh`,
+        const res = await axiosInstance.post(
+          `/qy/api/user/session/refresh`,
           {
             refresh: refreshToken,
             sign,
@@ -129,21 +112,6 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(responseConfig.data);
       }
     }
-
-    if (responseConfig.data.code === 401) {
-      refreshToken = null;
-      accessToken = null;
-      clientId = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("clientId");
-      return Promise.reject(responseConfig.data);
-    }
-
-    if (responseConfig.data.code === 400) {
-      message.error(responseConfig.data.message)
-    }
-
     return Promise.reject(responseConfig.data);
   },
   async (err: AxiosError) => {

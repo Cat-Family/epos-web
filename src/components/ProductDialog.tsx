@@ -14,7 +14,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import * as antd from "antd";
-import { withCookies } from "react-cookie"
+import { withCookies } from "react-cookie";
 
 interface Product {
   productName: string;
@@ -25,7 +25,6 @@ interface Product {
 }
 
 const ProductDialog = forwardRef((props, ref) => {
-
   const dishesArr: number[] = [];
 
   const [size, setSize] = useState(16);
@@ -159,8 +158,8 @@ const ProductDialog = forwardRef((props, ref) => {
                   id={dish.disheItemId}
                   control={
                     <Checkbox
-                        // onChange={handleChange}
-                        disabled={checkBoxDisable}
+                      // onChange={handleChange}
+                      disabled={checkBoxDisable}
                       name={dish.disheName}
                     />
                     //     <antd.Button size="large">{dish.disheName}</antd.Button>

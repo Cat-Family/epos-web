@@ -8,6 +8,7 @@ import useMenuAction from "../actions/useMenuActions";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProductDialog from "../components/ProductDialog";
 import Skeleton from "@mui/material/Skeleton";
+import JoyButton from "@mui/joy/Button";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,6 +42,7 @@ export default function HomePage() {
         flexGrow: 1,
         display: "flex",
         width: 1,
+        bgcolor: "background.paper",
       }}
     >
       <Box sx={{ width: "100vw", display: "flex" }}>
@@ -88,9 +90,9 @@ export default function HomePage() {
                     }}
                   >
                     {item?.products.map((item: any) => (
-                      <Button
+                      <JoyButton
                         key={item.productItemId}
-                        color="info"
+                        color="primary"
                         variant="outlined"
                         onClick={() => {
                           productDialog.current.productDialogOpen(item);
@@ -98,7 +100,7 @@ export default function HomePage() {
                         sx={{ width: "8rem", height: "4rem" }}
                       >
                         {item.productName}
-                      </Button>
+                      </JoyButton>
                     ))}
                   </Box>
                 </TabPanel>
