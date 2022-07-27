@@ -25,8 +25,6 @@ import {
   IconButton,
   Toolbar,
   Avatar,
-  MenuItem,
-  Menu,
   ListItemIcon,
   Divider,
   Button,
@@ -34,11 +32,10 @@ import {
 import { useRecoilState } from "recoil";
 import tableState from "../state/tableState";
 import TableDrawer from "../components/TableDrawer";
-import { ModeToggle } from "../App";
 import Badge from "@mui/joy/Badge";
 import Typography from "@mui/joy/Typography";
-// import Menu from "@mui/joy/Menu";
-// import MenuItem from "@mui/joy/MenuItem";
+import Menu from "@mui/joy/Menu";
+import MenuItem from "@mui/joy/MenuItem";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -61,16 +58,6 @@ const AppLayout = () => {
   const queryTable = async () => {
     await tableAction.getTables();
   };
-
-  useLayoutEffect(() => {
-    tableAction.getTables();
-  }, []);
-
-  useLayoutEffect(() => {
-    if (table[0]?.categoryType) {
-      setValue(table[0].categoryType.toString());
-    }
-  }, [table]);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorProfileMenu(event.currentTarget);
@@ -99,35 +86,6 @@ const AppLayout = () => {
       keepMounted
       open={isProfileMenuOpen}
       onClose={handleProfileMenuClose}
-      PaperProps={{
-        elevation: 0,
-        sx: {
-          width: 250,
-          overflow: "visible",
-          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-          mt: 1.5,
-          "& .MuiAvatar-root": {
-            width: 32,
-            height: 32,
-            ml: -0.5,
-            mr: 1,
-          },
-          "&:before": {
-            content: '""',
-            display: "block",
-            position: "absolute",
-            top: 0,
-            right: 14,
-            width: 10,
-            height: 10,
-            bgcolor: "background.paper",
-            transform: "translateY(-50%) rotate(45deg)",
-            zIndex: 0,
-          },
-        },
-      }}
-      transformOrigin={{ horizontal: "right", vertical: "top" }}
-      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
       <MenuItem>
         <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
@@ -192,19 +150,16 @@ const AppLayout = () => {
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <AppBar position="fixed">
         <Toolbar>
-          {/* <Link to="/">
+          <Link to="/">
             <img
               className="logo"
               style={{ height: 32, width: 32 }}
               src="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
               alt="logo"
             />
-          </Link> */}
+          </Link>
 
           <Box sx={{ flexGrow: 1 }} />
-
-          {/*TODO*/}
-          {/*这里的1号，需要展示为用户开台成功之后的桌号或者点击已经开台桌号*/}
           {location.pathname === "/" && (
             <>
               <Button
@@ -222,7 +177,6 @@ const AppLayout = () => {
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          <ModeToggle />
           <IconButton
             size="large"
             edge="end"

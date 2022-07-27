@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 import JSEncrypt from "jsencrypt";
 import { message } from "antd";
-// import { enqueueSnackbar } from "notistack";
+import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
 // export const baseURL: string = "http://127.0.0.1:8083";
@@ -63,16 +63,18 @@ axiosInstance.interceptors.response.use(
       return responseConfig;
     }
 
-    if (responseConfig.data.code === 400) {
-      message.error(responseConfig.data.message);
+    if (responseConfig.data.code === 401) {
+      // location.replace("/users/signin");
+      enqueueSnackbar(responseConfig.data.message, { variant: "error" });
+      return responseConfig;
     }
 
     if (responseConfig.data.code === 403 && refreshToken && clientId) {
       try {
         encrypt.setPublicKey(PUBLICKEY);
         const sign = encrypt.encrypt(`${clientId},${refreshToken}`);
-        const res = await axiosInstance.post(
-          `/qy/api/user/session/refresh`,
+        const res = await axios.post(
+          `${baseURL}/qy/api/user/session/refresh`,
           {
             refresh: refreshToken,
             sign,
@@ -85,14 +87,12 @@ axiosInstance.interceptors.response.use(
           }
         );
         if (res.data.code === 201) {
-          // enqueueSnackbar("刷新令牌成功");
           localStorage.setItem("accessToken", res.data.data.accessToken);
           localStorage.setItem("refreshToken", res.data.data.refreshToken);
           accessToken = res.data.data.accessToken;
           refreshToken = res.data.data.refreshToken;
           return axiosInstance.request(responseConfig.config);
         }
-        // enqueueSnackbar("刷新令牌错误" + res.data.message);
         refreshToken = null;
         accessToken = null;
         clientId = null;
@@ -101,7 +101,6 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("clientId");
         return Promise.reject(responseConfig.data);
       } catch (error: any) {
-        // enqueueSnackbar("刷新令牌错误" + error.message);
         refreshToken = null;
         accessToken = null;
         clientId = null;
