@@ -11,12 +11,12 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
-    "@hookform/resolvers": "^2.9.6",
+    "@hookform/resolvers": "^2.9.7",
     "@mui/icons-material": "^5.8.4",
     "@mui/joy": "^5.0.0-alpha.38",
-    "@mui/lab": "^5.0.0-alpha.91",
-    "@mui/material": "^5.9.1",
-    "antd": "^4.21.7",
+    "@mui/lab": "^5.0.0-alpha.92",
+    "@mui/material": "^5.9.2",
+    "antd": "^4.22.2",
     "axios": "^0.27.2",
     "i18next": "^21.8.14",
     "jsencrypt": "^3.2.1",
@@ -26,7 +26,7 @@
     "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.33.1",
-    "react-i18next": "^11.18.1",
+    "react-i18next": "^11.18.3",
     "react-router-dom": "^6.3.0",
     "recoil": "^0.7.4",
     "yup": "^0.32.11"
@@ -37,9 +37,9 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
     "diagnostic-languageserver": "^1.14.2",
-    "npm-check-updates": "^15.3.4",
+    "npm-check-updates": "^16.0.1",
     "typescript": "^4.7.4",
     "typescript-language-server": "^0.11.2",
-    "vite": "^3.0.2"
+    "vite": "^3.0.3"
   }
 }
