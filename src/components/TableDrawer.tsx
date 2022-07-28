@@ -1,120 +1,82 @@
 import React, {
-    FC,
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useMemo, useRef,
-    useState,
+  forwardRef,
+  useImperativeHandle,
+  useLayoutEffect,
+  useState,
 } from "react";
-
-import useTableActions from "../actions/useTableActions";
-import OpenTableStage from "../components/OpenTableStage";
+import Box from "@mui/material/Box";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Button from "@mui/joy/Button";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import { useSetRecoilState } from "recoil";
+import AppBar from "@mui/material/AppBar/AppBar";
+import { Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
+import useTableAction from "../actions/useTableActions";
+import { useRecoilState } from "recoil";
 import tableState from "../state/tableState";
-import * as antd from "antd";
-import {useRecoilState} from "recoil";
-import {DrawerProps} from "antd";
-
 
 const TableDrawer = forwardRef((props, ref) => {
-    const [table, setTable] = useRecoilState<any>(tableState);
-    const [visible, setVisible] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [placement, setPlacement] = useState<DrawerProps['placement']>('top');
+  const iOS =
+    typeof navigator !== "undefined" &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    const openTableStage = useRef<any>();
-    const tableActions = useTableActions();
+  const [open, setOpen] = useState<boolean>(false);
+  const [tables, setTables] = useRecoilState(tableState);
 
-    const onQueryTables = async () => {
-        await tableActions.getTables();
-    };
+  const toggleDrawer = (open: boolean) => setOpen(open);
 
-    useImperativeHandle(ref, () => ({
-        tableDrawerOpen() {
-            onQueryTables();
-            setVisible(true);
-        },
+  const tableActions = useTableAction();
 
-        tableDrawerClose() {
-            //TODO
-            //开台确认后 此行执行 但抽屉还是可见
-            // setVisible(false);
-            onClose();
-            //false
-        },
-    }));
+  useLayoutEffect(() => {
+    tableActions.getTables();
+  }, []);
 
-    const onClose = () => {
-        setVisible(false);
-    };
+  useImperativeHandle(
+    ref,
+    () => ({
+      toggleDrawer() {
+        setOpen((pre) => !pre);
+      },
+    }),
+    []
+  );
 
-    const descriptionElementRef = React.useRef<HTMLElement>(null);
-    const formGroupRef = React.useRef<HTMLElement>(null);
-    useEffect(() => {
-        if (open) {
-            const {current: descriptionElement} = descriptionElementRef;
-            if (descriptionElement !== null) {
-                descriptionElement.focus();
-            }
-        }
-    }, [open]);
-
-
-    return (
-        <antd.Drawer
-            title="桌号选择"
-            placement={placement}
-            closable={false}
-            onClose={onClose}
-            visible={visible}
-            key={placement}
-            height="60%"
-            contentWrapperStyle={{justifyContent: 'center'}}
-        >
-
-            {/*<Box sx={{display: "flex"}}>*/}
-
-            <antd.Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-
-                <antd.Col span={24}>
-                    <antd.Space size={[10, 20]} wrap>
-                        {table?.map((item: any) => (
-                            <antd.Button
-                                style={item.isLock === 0 ?
-                                    {
-                                        color: "rgb(24,144,255)",
-                                        backgroundColor: "white",
-                                        width: "62.4px",
-                                        height: "62.4px",
-                                    } : {
-                                        width: "62.4px",
-                                        height: "62.4px",
-                                    }}
-                                type="primary"
-                                size="large"
-                                // 1.如果isLock为1 即已经开台 走调购物车逻辑
-                                // 2.如果isLock为0 即未开台 走调开台逻辑 即锁定该桌号
-                                onClick={item.isLock === 1 ?
-                                    () => {
-                                        // TODO
-                                    }
-                                    : () => {
-                                        openTableStage.current.tableStageOpen(item);
-                                        onClose()
-                                    }}
-
-                            >{item.tableNum}</antd.Button>
-                            // <Button sx={{ width: "0.5rem", height: "2rem" }} color="info" variant="outlined">{item.tableNum}</Button>
-                        ))}
-                    </antd.Space>
-
-                </antd.Col>
-
-            </antd.Row>
-
-            <OpenTableStage ref={openTableStage}/>
-
-        </antd.Drawer>
-    );
+  return (
+    <SwipeableDrawer
+      anchor="top"
+      variant="temporary"
+      open={open}
+      onClose={() => toggleDrawer(false)}
+      onOpen={() => toggleDrawer(true)}
+      disableBackdropTransition={!iOS}
+      disableDiscovery={iOS}
+      sx={{ zIndex: 1000 }}
+    >
+      <AppBar position="static">
+        <Toolbar />
+      </AppBar>
+      <Box minHeight={100} maxHeight={240} p={1}>
+        {tables.length > 0 &&
+          tables.map((item: any, index: number) => (
+            <Button
+              key={index}
+              variant={item.isLock === 0 ? "outlined" : "soft"}
+              sx={{ width: 45, m: 1 }}
+            >
+              {item.tableNum}
+            </Button>
+          ))}
+      </Box>
+    </SwipeableDrawer>
+  );
 });
 
 export default TableDrawer;

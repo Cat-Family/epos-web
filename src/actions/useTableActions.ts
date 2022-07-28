@@ -3,7 +3,6 @@ import { useRecoilState } from "recoil";
 import tableState from "../state/tableState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
 
 const useTableAction = () => {
   const { enqueueSnackbar } = useSnackbar();

@@ -64,7 +64,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (responseConfig.data.code === 401) {
-      // location.replace("/users/signin");
+      location.replace("/users/signin");
       enqueueSnackbar(responseConfig.data.message, { variant: "error" });
       return responseConfig;
     }

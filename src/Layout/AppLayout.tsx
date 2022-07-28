@@ -166,7 +166,7 @@ const AppLayout = () => {
                 sx={{ fontSize: "1.2rem" }}
                 color="inherit"
                 onClick={() => {
-                  tableDrawer.current.tableDrawerOpen();
+                  tableDrawer.current.toggleDrawer();
                 }}
               >
                 1号
@@ -203,6 +203,7 @@ const AppLayout = () => {
         }}
       >
         <Outlet />
+        <TableDrawer ref={tableDrawer} />
       </Box>
       <div style={{ backgroundColor: "#333" }} className={"center"}></div>
       <BottomNavigation />
@@ -239,7 +240,6 @@ const AppLayout = () => {
           />
         </BottomNavigation>
       </Paper>
-      <TableDrawer ref={tableDrawer} />
     </Box>
   );
 };
