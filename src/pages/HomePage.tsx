@@ -9,7 +9,9 @@ import ProductDialog from "../components/ProductDialog";
 import Skeleton from "@mui/material/Skeleton";
 import JoyButton from "@mui/joy/Button";
 import tableState from "../state/tableState";
-
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import TabScrollButton from "@mui/material/TabScrollButton";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -47,7 +49,7 @@ export default function HomePage() {
       }}
     >
       <Box sx={{ width: "100vw", display: "flex" }}>
-        {value ? (
+        {value && (
           <TabContext value={value}>
             <Box
               sx={{
@@ -114,35 +116,14 @@ export default function HomePage() {
               ))}
             </Box>
           </TabContext>
-        ) : (
-          <>
-            <Box
-              sx={{
-                height: 1,
-                position: "fixed",
-                borderRight: 1,
-                borderColor: "divider",
-              }}
-            >
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-            </Box>
-            <Box sx={{ flexGrow: 1, pl: "5rem" }}>
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-            </Box>
-          </>
         )}
       </Box>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={Boolean(!value)}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ProductDialog ref={productDialog} />
     </Box>
   );

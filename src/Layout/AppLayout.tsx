@@ -34,6 +34,7 @@ import Typography from "@mui/joy/Typography";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
 import tableState from "../state/tableState";
+import { ModeToggle } from "../app/theme";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -160,6 +161,7 @@ const AppLayout = () => {
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
+          <ModeToggle />
           <IconButton
             size="large"
             edge="end"
