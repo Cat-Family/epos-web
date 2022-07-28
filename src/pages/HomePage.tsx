@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
 import useMenuAction from "../actions/useMenuActions";
@@ -9,6 +8,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProductDialog from "../components/ProductDialog";
 import Skeleton from "@mui/material/Skeleton";
 import JoyButton from "@mui/joy/Button";
+import tableState from "../state/tableState";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,6 +21,7 @@ export default function HomePage() {
   const productDialog = useRef<any>();
   const [menu, setMenu] = useRecoilState<any>(menuState);
   const [value, setValue] = useState<string>("");
+  const [table, setTable] = useRecoilState(tableState);
 
   useLayoutEffect(() => {
     menuAction.getMenu();
@@ -92,7 +93,13 @@ export default function HomePage() {
                     {item?.products.map((item: any) => (
                       <JoyButton
                         key={item.productItemId}
-                        color="primary"
+                        disabled={table === "未选择"}
+                        title={
+                          table === "未选择"
+                            ? "请选择需要点餐餐桌"
+                            : item.productName
+                        }
+                        color="neutral"
                         variant="outlined"
                         onClick={() => {
                           productDialog.current.productDialogOpen(item);

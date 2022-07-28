@@ -1,19 +1,17 @@
 import axiosInstance from "../app/request";
 import { useRecoilState } from "recoil";
-import tableState from "../state/tableState";
+import tablesState from "../state/tablesState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 
 const useTableAction = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const [table, setTable] = useRecoilState(tableState);
+  const [tables, setTables] = useRecoilState(tablesState);
 
   const getTables = async () => {
     try {
       const res = await axiosInstance.get("/qy/api/tables/queryTables");
 
-      setTable(res.data.data.tablesMsg);
+      setTables(res.data.data.tablesMsg);
 
       return res;
     } catch (error: any) {

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -11,9 +11,7 @@ import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import DiningOutlined from "@mui/icons-material/DiningOutlined";
 import RestoreIcon from "@mui/icons-material/Restore";
 import { useLocation } from "react-router-dom";
-import type { DrawerProps, RadioChangeEvent } from "antd";
 import useLoginOutActions from "../actions/useUserActions";
-import useTableAction from "../actions/useTableActions";
 import {
   ArrowForwardIosOutlined,
   Brightness7Outlined,
@@ -30,33 +28,25 @@ import {
   Button,
 } from "@mui/material";
 import { useRecoilState } from "recoil";
-import tableState from "../state/tableState";
 import TableDrawer from "../components/TableDrawer";
 import Badge from "@mui/joy/Badge";
 import Typography from "@mui/joy/Typography";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
+import tableState from "../state/tableState";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
   const location = useLocation();
   const loginOutActions = useLoginOutActions();
-  const tableAction = useTableAction();
-  const openTableStage = useRef<any>();
   const tableDrawer = useRef<any>();
   const [anchorProfileMenu, setAnchorProfileMenu] =
-    React.useState<null | HTMLElement>(null);
+    useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
-  const [visible, setVisible] = useState(false);
-  const [table, setTable] = useRecoilState<any>(tableState);
-  const [placement, setPlacement] = useState<DrawerProps["placement"]>("top");
+  const [table, setTable] = useRecoilState(tableState);
 
   const logout = async () => {
     await loginOutActions.loginOut();
-  };
-
-  const queryTable = async () => {
-    await tableAction.getTables();
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -116,9 +106,7 @@ const AppLayout = () => {
       <Divider />
       <MenuItem
         sx={{ display: "flex", justifyContent: "space-between" }}
-        onClick={() => {
-          handleProfileMenuClose();
-        }}
+        onClick={handleProfileMenuClose}
       >
         <ListItemIcon>
           <Brightness7Outlined fontSize="small" />
@@ -130,12 +118,7 @@ const AppLayout = () => {
           <ArrowForwardIosOutlined fontSize="small" />
         </ListItemIcon>
       </MenuItem>
-      <MenuItem
-        sx={{ display: "flex" }}
-        onClick={() => {
-          handleProfileMenuClose();
-        }}
-      >
+      <MenuItem sx={{ display: "flex" }} onClick={handleProfileMenuClose}>
         <ListItemIcon>
           <GTranslateOutlined />
         </ListItemIcon>
@@ -169,7 +152,7 @@ const AppLayout = () => {
                   tableDrawer.current.toggleDrawer();
                 }}
               >
-                1号
+                {table}
               </Button>
               <Badge badgeContent={12}>
                 <Typography fontSize="xl">🛍</Typography>

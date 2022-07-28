@@ -4,36 +4,34 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import Box from "@mui/material/Box";
+import Box from "@mui/joy/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/joy/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { useSetRecoilState } from "recoil";
 import AppBar from "@mui/material/AppBar/AppBar";
 import { Toolbar } from "@mui/material";
-import { Link } from "react-router-dom";
 import useTableAction from "../actions/useTableActions";
 import { useRecoilState } from "recoil";
+import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";
+import { useSnackbar } from "notistack";
 
 const TableDrawer = forwardRef((props, ref) => {
+  const tableActions = useTableAction();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState<boolean>(false);
+  const [tables, setTables] = useRecoilState(tablesState);
+  const [table, setTable] = useRecoilState(tableState);
+
   const iOS =
     typeof navigator !== "undefined" &&
     /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-  const [open, setOpen] = useState<boolean>(false);
-  const [tables, setTables] = useRecoilState(tableState);
-
+  /**
+   * @des
+   * @param open boolean
+   * @returns
+   */
   const toggleDrawer = (open: boolean) => setOpen(open);
-
-  const tableActions = useTableAction();
 
   useLayoutEffect(() => {
     tableActions.getTables();
@@ -70,6 +68,17 @@ const TableDrawer = forwardRef((props, ref) => {
               key={index}
               variant={item.isLock === 0 ? "outlined" : "soft"}
               sx={{ width: 45, m: 1 }}
+              onClick={() => {
+                if (item.tableNum === table) {
+                  enqueueSnackbar("重复选择餐桌", { variant: "warning" });
+                } else {
+                  if (item.isLock === 0) {
+                  } else {
+                    setTable(item.tableNum);
+                    toggleDrawer(false);
+                  }
+                }
+              }}
             >
               {item.tableNum}
             </Button>
