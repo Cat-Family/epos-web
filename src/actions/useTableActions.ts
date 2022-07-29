@@ -21,12 +21,14 @@ const useTableAction = () => {
 
   const openStage = async (tableNum: string, persons: number) => {
     try {
-      await axiosInstance.post("/qy/api/tables/openStage", {
+      const res = await axiosInstance.post("/qy/api/tables/openStage", {
         tableNum,
         persons,
       });
+
+      return Promise.resolve(res);
     } catch (error: any) {
-      return error;
+      return Promise.reject(error);
     }
   };
   return { getTables, openStage };

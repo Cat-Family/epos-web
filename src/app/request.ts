@@ -21,8 +21,10 @@ let clientId: string | null = localStorage.getItem("clientId");
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
-  timeout: 6000,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -63,7 +65,7 @@ axiosInstance.interceptors.response.use(
     if (responseConfig.data.code === 401) {
       location.replace("/users/signin");
       enqueueSnackbar(responseConfig.data.message, { variant: "error" });
-      return responseConfig;
+      return Promise.reject(responseConfig.data);
     }
 
     if (responseConfig.data.code === 403 && refreshToken && clientId) {

@@ -17,7 +17,6 @@ import { useSnackbar } from "notistack";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/joy/Typography";
 
@@ -26,6 +25,7 @@ const TableDrawer = forwardRef((props, ref) => {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [openStage, setOpenStage] = useState<string>("");
   const [toll, setToll] = useState<number>(1);
   const [tables, setTables] = useRecoilState(tablesState);
@@ -47,14 +47,19 @@ const TableDrawer = forwardRef((props, ref) => {
   };
 
   const handleStageOpen = async () => {
+    setLoading(true);
     try {
       await tableActions.openStage(openStage, toll);
       setTable(openStage);
       handleStageClose();
       toggleDrawer(false);
       enqueueSnackbar("开台成功", { variant: "success" });
+      setLoading(false);
+      return;
     } catch (error: any) {
       enqueueSnackbar(error.message, { variant: "error" });
+      setLoading(false);
+      return;
     }
   };
 
