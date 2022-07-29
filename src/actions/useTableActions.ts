@@ -19,7 +19,7 @@ const useTableAction = () => {
     }
   };
 
-  const openStage = async (tableNum: string, persons: string) => {
+  const openStage = async (tableNum: string, persons: number) => {
     try {
       await axiosInstance.post("/qy/api/tables/openStage", {
         tableNum,

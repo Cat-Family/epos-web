@@ -14,11 +14,20 @@ import { useRecoilState } from "recoil";
 import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";
 import { useSnackbar } from "notistack";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/joy/Typography";
 
 const TableDrawer = forwardRef((props, ref) => {
   const tableActions = useTableAction();
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [openStage, setOpenStage] = useState<string>("");
+  const [toll, setToll] = useState<number>(1);
   const [tables, setTables] = useRecoilState(tablesState);
   const [table, setTable] = useRecoilState(tableState);
 
@@ -33,9 +42,30 @@ const TableDrawer = forwardRef((props, ref) => {
    */
   const toggleDrawer = (open: boolean) => setOpen(open);
 
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleStageOpen = async () => {
+    try {
+      await tableActions.openStage(openStage, toll);
+      setTable(openStage);
+      handleStageClose();
+      toggleDrawer(false);
+      enqueueSnackbar("开台成功", { variant: "success" });
+    } catch (error: any) {
+      enqueueSnackbar(error.message, { variant: "error" });
+    }
+  };
+
+  const handleStageClose = () => {
+    setDialogOpen(false);
+    setToll(1);
+  };
+
   useLayoutEffect(() => {
     tableActions.getTables();
-  }, []);
+  }, [table]);
 
   useImperativeHandle(
     ref,
@@ -48,43 +78,91 @@ const TableDrawer = forwardRef((props, ref) => {
   );
 
   return (
-    <SwipeableDrawer
-      anchor="top"
-      variant="temporary"
-      open={open}
-      onClose={() => toggleDrawer(false)}
-      onOpen={() => toggleDrawer(true)}
-      disableBackdropTransition={!iOS}
-      disableDiscovery={iOS}
-      sx={{ zIndex: 1000 }}
-    >
-      <AppBar position="static">
-        <Toolbar />
-      </AppBar>
-      <Box minHeight={100} maxHeight={240} p={1}>
-        {tables.length > 0 &&
-          tables.map((item: any, index: number) => (
-            <Button
-              key={index}
-              variant={item.isLock === 0 ? "outlined" : "soft"}
-              sx={{ width: 45, m: 1 }}
-              onClick={() => {
-                if (item.tableNum === table) {
-                  enqueueSnackbar("重复选择餐桌", { variant: "warning" });
-                } else {
-                  if (item.isLock === 0) {
+    <>
+      <SwipeableDrawer
+        anchor="top"
+        variant="temporary"
+        open={open}
+        onClose={() => toggleDrawer(false)}
+        onOpen={() => toggleDrawer(true)}
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        sx={{ zIndex: 1000 }}
+      >
+        <AppBar position="static">
+          <Toolbar />
+        </AppBar>
+        <Box minHeight={100} maxHeight={240} p={1}>
+          {tables.length > 0 &&
+            tables.map((item: any, index: number) => (
+              <Button
+                key={index}
+                variant={item.isLock === 0 ? "outlined" : "soft"}
+                sx={{ width: 45, m: 1 }}
+                onClick={() => {
+                  if (item.tableNum === table) {
+                    enqueueSnackbar("重复选择餐桌", { variant: "warning" });
                   } else {
-                    setTable(item.tableNum);
-                    toggleDrawer(false);
+                    if (item.isLock === 0) {
+                      setOpenStage(item.tableNum);
+                      handleClickOpen();
+                    } else {
+                      setTable(item.tableNum);
+                      toggleDrawer(false);
+                    }
                   }
-                }
-              }}
+                }}
+              >
+                {item.tableNum}
+              </Button>
+            ))}
+        </Box>
+      </SwipeableDrawer>
+      <Dialog
+        fullWidth={true}
+        maxWidth={"sm"}
+        open={dialogOpen}
+        onClose={handleStageClose}
+      >
+        <DialogTitle>{`开台: ${openStage} 号桌`}</DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              m: "auto",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="plain"
+              size="lg"
+              onClick={() => setToll((pre) => pre - 1)}
+              disabled={toll <= 1}
             >
-              {item.tableNum}
+              -
             </Button>
-          ))}
-      </Box>
-    </SwipeableDrawer>
+            <Typography fontSize="lg">{toll}</Typography>
+            <Button
+              variant="plain"
+              onClick={() => setToll((pre) => pre + 1)}
+              size="lg"
+            >
+              +
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="plain" onClick={handleStageClose}>
+            取消
+          </Button>
+          <Button variant="plain" onClick={handleStageOpen}>
+            确定
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 });
 

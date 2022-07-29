@@ -23,9 +23,6 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   timeout: 6000,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8",
-  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -110,6 +107,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(responseConfig.data);
       }
     }
+
     return Promise.reject(responseConfig.data);
   },
   async (err: AxiosError) => {
