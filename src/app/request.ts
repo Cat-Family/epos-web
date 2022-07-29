@@ -5,7 +5,6 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import JSEncrypt from "jsencrypt";
-import { message } from "antd";
 import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
@@ -22,9 +21,6 @@ let clientId: string | null = localStorage.getItem("clientId");
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8",
-  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -33,6 +29,7 @@ axiosInstance.interceptors.request.use(
       requestConfig.headers = {
         authorization: `Bearer ${accessToken}`,
         clientid: clientId,
+        "Content-Type": "application/json;charset=UTF-8",
       };
     }
     return requestConfig;

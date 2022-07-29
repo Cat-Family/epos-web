@@ -70,7 +70,7 @@ const TableDrawer = forwardRef((props, ref) => {
 
   useLayoutEffect(() => {
     tableActions.getTables();
-  }, [table]);
+  }, [table, open]);
 
   useImperativeHandle(
     ref,

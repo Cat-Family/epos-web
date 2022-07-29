@@ -37,6 +37,7 @@ const userActions = () => {
       });
       return res;
     } catch (error: any) {
+      enqueueSnackbar(error.message, { variant: "error" });
       return error;
     }
   };
