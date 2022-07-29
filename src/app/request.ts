@@ -110,7 +110,7 @@ axiosInstance.interceptors.response.use(
 
     return Promise.reject(responseConfig.data);
   },
-  async (err: AxiosError) => {
+  (err: AxiosError) => {
     return Promise.reject(err);
   }
 );
