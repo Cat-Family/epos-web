@@ -37,7 +37,7 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
     "diagnostic-languageserver": "^1.14.2",
-    "npm-check-updates": "^16.0.1",
+    "npm-check-updates": "^16.0.5",
     "typescript": "^4.7.4",
     "typescript-language-server": "^0.11.2",
     "vite": "^3.0.3"
