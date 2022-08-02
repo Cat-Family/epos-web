@@ -29,6 +29,7 @@ import {
 } from "@mui/material";
 import { useRecoilState } from "recoil";
 import TableDrawer from "../components/TableDrawer";
+import CartDrawer from "../components/CartDrawer";
 import Badge from "@mui/joy/Badge";
 import Typography from "@mui/joy/Typography";
 import Menu from "@mui/joy/Menu";
@@ -41,6 +42,7 @@ const AppLayout = () => {
   const location = useLocation();
   const loginOutActions = useLoginOutActions();
   const tableDrawer = useRef<any>();
+  const cartDrawer = useRef<any>();
   const [anchorProfileMenu, setAnchorProfileMenu] =
     useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
@@ -155,13 +157,15 @@ const AppLayout = () => {
               >
                 {table}
               </Button>
-              <Badge badgeContent={12}>
-                <Typography fontSize="xl">🛍</Typography>
-              </Badge>
+              <Button onClick={() => cartDrawer.current.toggleDrawer()}>
+                <Badge badgeContent={12}>
+                  <Typography fontSize="xl">🛍</Typography>
+                </Badge>
+              </Button>
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          <ModeToggle />
+          {/* <ModeToggle /> */}
           <IconButton
             size="large"
             edge="end"
@@ -189,8 +193,8 @@ const AppLayout = () => {
       >
         <Outlet />
         <TableDrawer ref={tableDrawer} />
+        <CartDrawer ref={cartDrawer} />
       </Box>
-      <div style={{ backgroundColor: "#333" }} className={"center"}></div>
       <BottomNavigation />
 
       <Paper
