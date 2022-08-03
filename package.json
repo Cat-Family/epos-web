@@ -9,21 +9,21 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",
     "@mui/icons-material": "^5.8.4",
-    "@mui/joy": "^5.0.0-alpha.38",
-    "@mui/lab": "^5.0.0-alpha.92",
-    "@mui/material": "^5.9.2",
-    "antd": "^4.22.1",
+    "@mui/joy": "^5.0.0-alpha.39",
+    "@mui/lab": "^5.0.0-alpha.93",
+    "@mui/material": "^5.9.3",
+    "antd": "^4.22.3",
     "axios": "^0.27.2",
-    "i18next": "^21.8.14",
+    "i18next": "^21.8.16",
     "jsencrypt": "^3.2.1",
     "notistack": "3.0.0-alpha.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.33.1",
+    "react-hook-form": "^7.34.0",
     "react-i18next": "^11.18.3",
     "react-router-dom": "^6.3.0",
     "recoil": "^0.7.4",
@@ -35,9 +35,9 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
     "diagnostic-languageserver": "^1.14.2",
-    "npm-check-updates": "^16.0.1",
+    "npm-check-updates": "^16.0.5",
     "typescript": "^4.7.4",
     "typescript-language-server": "^0.11.2",
-    "vite": "^3.0.3"
+    "vite": "^3.0.4"
   }
 }
