@@ -6,17 +6,12 @@ import React, {
   useState,
 } from "react";
 import Box from "@mui/joy/Box";
-import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/joy/Button";
-import TextField from "@mui/joy/TextField";
-import Avatar from "@mui/joy/Avatar";
 import FormLabel from "@mui/joy/FormLabel";
 import Radio, { radioClasses } from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
@@ -27,6 +22,7 @@ import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import Typography from "@mui/joy/Typography";
 import { useSnackbar } from "notistack";
+import Add from "@mui/icons-material/Add";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -40,6 +36,7 @@ const Transition = React.forwardRef(function Transition(
 interface Product {
   productName: string;
   dishes: Array<string>;
+  specification: Array<any>;
   productCategoryType: number;
   productItemId: number;
   productPrice: string;
@@ -47,11 +44,6 @@ interface Product {
 
 const ProductDialog = forwardRef((props, ref) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const dishesArr: number[] = [];
-  const [size, setSize] = useState(16);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [checkBoxDisable, setCheckBoxDisable] = useState(false);
   const [open, setOpen] = useState(false);
   const [portion, setPortion] = useState(1);
   const [value, setValue] = useState<any[]>([]);
@@ -61,10 +53,12 @@ const ProductDialog = forwardRef((props, ref) => {
     productCategoryType: 0,
     productItemId: 0,
     productPrice: "",
+    specification: [],
   });
 
   useImperativeHandle(ref, () => ({
     productDialogOpen(props: Product) {
+      console.log(props);
       setProductInfo(props);
       setOpen(true);
     },
@@ -82,11 +76,12 @@ const ProductDialog = forwardRef((props, ref) => {
       productCategoryType: 0,
       productItemId: 0,
       productPrice: "",
+      specification: [],
     });
+    setValue([]);
   };
 
   const descriptionElementRef = React.useRef<HTMLElement>(null);
-  const listRef = React.useRef<HTMLElement>(null);
   useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
@@ -160,69 +155,77 @@ const ProductDialog = forwardRef((props, ref) => {
             +
           </Button>
         </Box>
-        <FormLabel
-          id="storage-label"
-          sx={{
-            mb: 2,
-            fontWeight: "xl",
-            textTransform: "uppercase",
-            fontSize: "sm",
-            letterSpacing: "0.15rem",
-          }}
-        >
-          规格
-        </FormLabel>
-        <RadioGroup
-          aria-labelledby="product-size-attribute"
-          defaultValue="M"
-          sx={{
-            gap: 2,
-            mb: 2,
-            flexWrap: "wrap",
-            flexDirection: "row",
-            justifyContent: "space-around",
-          }}
-        >
-          {["S", "M", "L"].map((size) => (
-            <Sheet
-              key={size}
+        {productInfo.specification.length > 0 && (
+          <>
+            <FormLabel
+              id="storage-label"
               sx={{
-                position: "relative",
-                width: 40,
-                height: 40,
-                flexShrink: 0,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                "--joy-focus-outlineOffset": "4px",
-                "--joy-palette-focusVisible": (theme) =>
-                  theme.vars.palette.neutral.outlinedBorder,
-                [`& .${radioClasses.checked}`]: {
-                  [`& .${radioClasses.label}`]: {
-                    fontWeight: "lg",
-                  },
-                  [`& .${radioClasses.action}`]: {
-                    "--variant-borderWidth": "2px",
-                    borderColor: "text.secondary",
-                  },
-                },
-                [`& .${radioClasses.action}.${radioClasses.focusVisible}`]: {
-                  outlineWidth: "2px",
-                },
+                mb: 2,
+                fontWeight: "xl",
+                textTransform: "uppercase",
+                fontSize: "sm",
+                letterSpacing: "0.15rem",
               }}
             >
-              <Radio
-                color="neutral"
-                overlay
-                disableIcon
-                value={size}
-                label={size}
-                checkedIcon={<CheckCircleRoundedIcon />}
-              />
-            </Sheet>
-          ))}
-        </RadioGroup>
+              规格
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="product-size-attribute"
+              defaultValue={productInfo.specification[0].speId}
+              sx={{
+                gap: 2,
+                mb: 2,
+                flexWrap: "wrap",
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            >
+              {productInfo.specification.map((item: any) => (
+                <Sheet
+                  key={item.speId}
+                  sx={{
+                    position: "relative",
+                    width: 40,
+                    height: 40,
+                    flexShrink: 0,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    "--joy-focus-outlineOffset": "4px",
+                    "--joy-palette-focusVisible": (theme) =>
+                      theme.vars.palette.neutral.outlinedBorder,
+                    [`& .${radioClasses.checked}`]: {
+                      [`& .${radioClasses.label}`]: {
+                        fontWeight: "lg",
+                      },
+                      [`& .${radioClasses.action}`]: {
+                        "--variant-borderWidth": "2px",
+                        borderColor: "text.secondary",
+                      },
+                    },
+                    [`& .${radioClasses.action}.${radioClasses.focusVisible}`]:
+                      {
+                        outlineWidth: "2px",
+                      },
+                  }}
+                >
+                  <Radio
+                    color="neutral"
+                    overlay
+                    disableIcon
+                    value={item.speId}
+                    label={item.speName}
+                    checkedIcon={<CheckCircleRoundedIcon />}
+                  />
+                </Sheet>
+              ))}
+            </RadioGroup>
+          </>
+        )}
 
         {productInfo.dishes.length > 0 && (
           <>
@@ -281,11 +284,17 @@ const ProductDialog = forwardRef((props, ref) => {
         )}
       </Box>
       <DialogActions>
-        <Button variant="plain" onClick={handleClose}>
+        <Button variant="outlined" onClick={handleClose}>
           取消
         </Button>
-        <Button variant="plain" onClick={handleClose}>
-          添加到购物车
+        <Button
+          startIcon={<Add />}
+          onClick={() => {
+            console.log({ ...productInfo, portion, value });
+            handleClose();
+          }}
+        >
+          加入购物车
         </Button>
       </DialogActions>
     </Dialog>

@@ -68,7 +68,18 @@ const CartDrawer = forwardRef((props, ref) => {
         <AppBar position="static">
           <Toolbar />
         </AppBar>
-        test
+        <Box
+          p={1}
+          minWidth="100vw"
+          height="100%"
+          sx={{ display: "flex", flexDirection: "column" }}
+        >
+          <Box sx={{ flexGrow: 1 }}>test</Box>
+          <Box sx={{ display: "flex", flexDirection: "row-reverse", gap: 2 }}>
+            <Button>下单</Button>
+            <Button onClick={() => toggleDrawer(false)}>关闭</Button>
+          </Box>
+        </Box>
       </SwipeableDrawer>
     </>
   );
