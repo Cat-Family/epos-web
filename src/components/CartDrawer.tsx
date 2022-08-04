@@ -13,18 +13,22 @@ import useCartActions from "../actions/useCartActions";
 import { useRecoilState } from "recoil";
 import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";
+import cartState from "../state/cartState";
 import { useSnackbar } from "notistack";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/joy/Typography";
+import { List, ListItem } from "@mui/joy";
+import { Container } from "@mui/system";
 
 const CartDrawer = forwardRef((props, ref) => {
   const cartActions = useCartActions();
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState<boolean>(false);
   const [table, setTable] = useRecoilState(tableState);
+  const [cart, setCart] = useRecoilState<any>(cartState);
 
   const iOS =
     typeof navigator !== "undefined" &&
@@ -74,10 +78,31 @@ const CartDrawer = forwardRef((props, ref) => {
           height="100%"
           sx={{ display: "flex", flexDirection: "column" }}
         >
-          <Box sx={{ flexGrow: 1 }}>test</Box>
+          <Container
+            sx={{
+              flexGrow: 1,
+              justifyContent: "center",
+              alightItems: "center",
+            }}
+            maxWidth="sm"
+          >
+            <Typography>{`订单编号：${cart?.sku?.orderId}`}</Typography>
+            <Typography>{`用餐人数：${cart?.sku?.persons}`}</Typography>
+            <List>
+              {cart?.sku?.cartMessage?.length > 0 &&
+                cart?.sku?.cartMessage.map((item: any, index: number) => (
+                  <ListItem
+                    key={index}
+                  >{`菜名：${item.productName} \u00A0 单价：${item.price} \u00A0 份数：${item.productNum}`}</ListItem>
+                ))}
+            </List>
+          </Container>
           <Box sx={{ display: "flex", flexDirection: "row-reverse", gap: 2 }}>
-            <Button>下单</Button>
-            <Button onClick={() => toggleDrawer(false)}>关闭</Button>
+            <Button variant="solid">下单</Button>
+            <Button variant="outlined" onClick={() => toggleDrawer(false)}>
+              关闭
+            </Button>
+            <Typography>{`小计：${cart?.sku?.totalPrice}`}</Typography>
           </Box>
         </Box>
       </SwipeableDrawer>

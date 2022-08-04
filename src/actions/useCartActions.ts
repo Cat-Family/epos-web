@@ -20,7 +20,7 @@ const useCartActions = () => {
         tableNum,
       });
 
-      setCart(res.data.data.menuItems);
+      setCart(res.data.data);
 
       return res;
     } catch (error: any) {

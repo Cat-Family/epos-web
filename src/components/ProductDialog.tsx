@@ -65,7 +65,6 @@ const ProductDialog = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     productDialogOpen(props: Product) {
-      console.log(props);
       setProductInfo(props);
       setOpen(true);
       setSpecification(props.specification[0]?.speId);
@@ -113,8 +112,6 @@ const ProductDialog = forwardRef((props, ref) => {
         },
       });
       await cartActions.getCart(table);
-
-      console.log(res);
 
       enqueueSnackbar("添加成功", { variant: "success" });
       handleClose();
