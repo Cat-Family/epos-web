@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/icons-512.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>千渝掌柜</title>
+    <style>
+      .status {
+        width: 100%;
+        padding: 20px;
+        font-size: 2rem;
+        text-align: center;
+        font-family: sans-serif;
+        font-weight: bold;
+        color: #fff;
+        transition: all 0.575s;
+      }
+
+      .status.on {
+        background: #70aebf;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+      }
+      .status.off {
+        background: #ff6c5f;
+      }
+
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status" class="status on">离线</div>
+  </body>
+</html>
