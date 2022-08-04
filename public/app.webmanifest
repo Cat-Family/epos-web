@@ -1,0 +1,34 @@
+{
+    "short_name": "千渝掌柜",
+    "name": "千渝掌柜 - EPOS",
+    "icons": [
+        {
+            "src": "/images/icons-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/images/icons-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#3367D6",
+    "description": "商铺点餐系统",
+    "screenshots": [
+        {
+            "src": "/images/screenshot1.jpeg",
+            "type": "image/jpeg",
+            "sizes": "590x1277"
+        },
+        {
+            "src": "/images/screenshot2.jpeg",
+            "type": "image/jpeg",
+            "sizes": "1722x946"
+        }
+    ]
+}
