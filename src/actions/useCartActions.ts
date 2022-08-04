@@ -29,7 +29,19 @@ const useCartActions = () => {
     }
   };
 
-  return { getCart };
+  const postCart = async (props: any) => {
+    try {
+      const res = await axiosInstance.post("/qy/api/sku/2sku", {
+        ...props,
+      });
+
+      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  return { getCart, postCart };
 };
 
 export default useCartActions;

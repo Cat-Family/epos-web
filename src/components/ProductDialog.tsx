@@ -18,11 +18,14 @@ import RadioGroup from "@mui/joy/RadioGroup";
 import Sheet from "@mui/joy/Sheet";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import Checkbox from "@mui/joy/Checkbox";
+import { useRecoilState } from "recoil";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import Typography from "@mui/joy/Typography";
 import { useSnackbar } from "notistack";
 import Add from "@mui/icons-material/Add";
+import tableState from "../state/tableState";
+import useCartActions from "../actions/useCartActions";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -43,10 +46,14 @@ interface Product {
 }
 
 const ProductDialog = forwardRef((props, ref) => {
+  const cartActions = useCartActions();
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const [portion, setPortion] = useState(1);
   const [value, setValue] = useState<any[]>([]);
+  const [table, setTable] = useRecoilState(tableState);
+  const [specification, setSpecification] = useState<string>();
+  const [price, setPrice] = useState<any>(0);
   const [productInfo, setProductInfo] = useState<Product>({
     productName: "",
     dishes: [],
@@ -61,6 +68,8 @@ const ProductDialog = forwardRef((props, ref) => {
       console.log(props);
       setProductInfo(props);
       setOpen(true);
+      setSpecification(props.specification[0]?.speId);
+      setPrice(props.productPrice);
     },
 
     productDialogClose() {
@@ -91,6 +100,28 @@ const ProductDialog = forwardRef((props, ref) => {
     }
   }, [open]);
 
+  const handleToCart = async () => {
+    try {
+      const res = await cartActions.postCart({
+        tableNum: table,
+        productInfo: {
+          productId: productInfo.productItemId,
+          specification,
+          productNum: portion,
+          price,
+          dishesInfo: value,
+        },
+      });
+      await cartActions.getCart(table);
+
+      console.log(res);
+
+      enqueueSnackbar("添加成功", { variant: "success" });
+      handleClose();
+    } catch (error: any) {
+      enqueueSnackbar(error.message, { variant: "error" });
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -155,7 +186,7 @@ const ProductDialog = forwardRef((props, ref) => {
             +
           </Button>
         </Box>
-        {productInfo.specification.length > 0 && (
+        {productInfo.specification?.length > 0 && (
           <>
             <FormLabel
               id="storage-label"
@@ -180,7 +211,11 @@ const ProductDialog = forwardRef((props, ref) => {
                 justifyContent: "space-around",
               }}
               onChange={(e) => {
-                console.log(e.target.value);
+                const item = productInfo.specification.find(
+                  (item) => item.speId == e.target.value
+                );
+                setSpecification(e.target.value);
+                setPrice(item.spePrice);
               }}
             >
               {productInfo.specification.map((item: any) => (
@@ -227,7 +262,7 @@ const ProductDialog = forwardRef((props, ref) => {
           </>
         )}
 
-        {productInfo.dishes.length > 0 && (
+        {productInfo.dishes?.length > 0 && (
           <>
             <FormLabel
               id="storage-label"
@@ -262,13 +297,7 @@ const ProductDialog = forwardRef((props, ref) => {
                       }
                       onChange={(event) => {
                         if (event.target.checked) {
-                          if (value.length < 2) {
-                            setValue((val) => [...val, dish.disheItemId]);
-                          } else {
-                            enqueueSnackbar("此为双拼选项", {
-                              variant: "warning",
-                            });
-                          }
+                          setValue((val) => [...val, dish.disheItemId]);
                         } else {
                           setValue((val) =>
                             val.filter((text) => text !== dish.disheItemId)
@@ -287,13 +316,7 @@ const ProductDialog = forwardRef((props, ref) => {
         <Button variant="outlined" onClick={handleClose}>
           取消
         </Button>
-        <Button
-          startIcon={<Add />}
-          onClick={() => {
-            console.log({ ...productInfo, portion, value });
-            handleClose();
-          }}
-        >
+        <Button startIcon={<Add />} onClick={() => handleToCart()}>
           加入购物车
         </Button>
       </DialogActions>
