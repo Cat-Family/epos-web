@@ -96,6 +96,7 @@ const CartDrawer = forwardRef((props, ref) => {
                     productNum={item.productNum}
                     dishesInfo={item.dishesInfo}
                     specification={item.specification}
+                    cartId={item.cartId}
                   />
                 ))}
             </Stack>

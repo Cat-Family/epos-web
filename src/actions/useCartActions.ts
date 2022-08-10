@@ -40,7 +40,19 @@ const useCartActions = () => {
     }
   };
 
-  return { getCart, postCart };
+  const operationSku = async (props: any) => {
+    try {
+      const res = await axiosInstance.post("/qy/api/sku/operation", {
+        ...props,
+      });
+
+      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  return { getCart, postCart,operationSku};
 };
 
 export default useCartActions;
