@@ -66,13 +66,7 @@ const AppLayout = () => {
   };
 
   const [value, setValue] = React.useState(
-    location.pathname === "/"
-      ? 0
-      : location.pathname === "/orders"
-      ? 1
-      : location.pathname === "/bills"
-      ? 2
-      : 3
+    location.pathname === "/" ? 0 : location.pathname === "/bills" ? 1 : 2
   );
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -167,6 +161,7 @@ const AppLayout = () => {
                   if (table === "未选择") {
                     enqueueSnackbar("未选择桌位", { variant: "warning" });
                   } else {
+                    tableDrawer.current.closeDrawer();
                     cartDrawer.current.toggleDrawer();
                   }
                 }}
@@ -229,21 +224,11 @@ const AppLayout = () => {
           onChange={(event, newValue) => {
             setValue(newValue);
             navigate(
-              newValue === 0
-                ? "/"
-                : newValue === 1
-                ? "/orders"
-                : newValue === 2
-                ? "/bills"
-                : "/report"
+              newValue === 0 ? "/" : newValue === 1 ? "/bills" : "/report"
             );
           }}
         >
           <BottomNavigationAction label="点餐" icon={<DiningOutlined />} />
-          <BottomNavigationAction
-            label="订单"
-            icon={<RoomServiceOutlinedIcon />}
-          />
           <BottomNavigationAction label="账单" icon={<RestoreIcon />} />
           <BottomNavigationAction
             label="报表"

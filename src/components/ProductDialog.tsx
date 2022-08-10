@@ -127,11 +127,10 @@ const ProductDialog = forwardRef((props, ref) => {
       onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle minWidth={320}>{productInfo.productName}</DialogTitle>
+      <DialogTitle minWidth={280}>{productInfo.productName}</DialogTitle>
       <Box
         maxHeight={"50vh"}
         minHeight={"20vh"}
-        minWidth={"40vw"}
         id="scroll-dialog"
         ref={descriptionElementRef}
         sx={{

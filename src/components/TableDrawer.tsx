@@ -78,6 +78,9 @@ const TableDrawer = forwardRef((props, ref) => {
       toggleDrawer() {
         setOpen((pre) => !pre);
       },
+      closeDrawer() {
+        setOpen(false);
+      },
     }),
     []
   );
@@ -97,30 +100,32 @@ const TableDrawer = forwardRef((props, ref) => {
         <AppBar position="static">
           <Toolbar />
         </AppBar>
-        <Box minHeight={100} maxHeight={240} p={1}>
-          {tables.length > 0 &&
-            tables.map((item: any, index: number) => (
-              <Button
-                key={index}
-                variant={item.isLock === 0 ? "outlined" : "soft"}
-                sx={{ width: 45, m: 1 }}
-                onClick={() => {
-                  if (item.tableNum === table) {
-                    enqueueSnackbar("重复选择餐桌", { variant: "warning" });
-                  } else {
-                    if (item.isLock === 0) {
-                      setOpenStage(item.tableNum);
-                      handleClickOpen();
+        <Box minHeight={100} maxHeight={340}>
+          <Box bgcolor="background.paper" p={1}>
+            {tables.length > 0 &&
+              tables.map((item: any, index: number) => (
+                <Button
+                  key={index}
+                  variant={item.isLock === 0 ? "outlined" : "soft"}
+                  sx={{ width: 58, m: 1, height: 50 }}
+                  onClick={() => {
+                    if (item.tableNum === table) {
+                      enqueueSnackbar("重复选择餐桌", { variant: "warning" });
                     } else {
-                      setTable(item.tableNum);
-                      toggleDrawer(false);
+                      if (item.isLock === 0) {
+                        setOpenStage(item.tableNum);
+                        handleClickOpen();
+                      } else {
+                        setTable(item.tableNum);
+                        toggleDrawer(false);
+                      }
                     }
-                  }
-                }}
-              >
-                {item.tableNum}
-              </Button>
-            ))}
+                  }}
+                >
+                  {item.tableNum}
+                </Button>
+              ))}
+          </Box>
         </Box>
       </SwipeableDrawer>
       <Dialog
