@@ -17,6 +17,7 @@ const CartItemCard = ({
                           productNum,
                           dishesInfo,
                           specification,
+                          tableNum
                       }) => {
     const {enqueueSnackbar} = useSnackbar();
     const cartActions = useCartActions();
@@ -27,6 +28,7 @@ const CartItemCard = ({
                 cartId: cartId,
                 tag: tag
             });
+            await cartActions.getCart(tableNum);
         } catch (error: any) {
             enqueueSnackbar(error.message, {variant: "error"});
         }
