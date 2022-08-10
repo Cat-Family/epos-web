@@ -35,7 +35,9 @@ import Typography from "@mui/joy/Typography";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
 import tableState from "../state/tableState";
+import cartState from "../state/cartState";
 import { ModeToggle } from "../app/theme";
+import { enqueueSnackbar } from "notistack";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -47,6 +49,7 @@ const AppLayout = () => {
     useState<null | HTMLElement>(null);
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
   const [table, setTable] = useRecoilState(tableState);
+  const [cart, setCart] = useRecoilState<any>(cartState);
 
   const logout = async () => {
     await loginOutActions.loginOut();
@@ -157,8 +160,25 @@ const AppLayout = () => {
               >
                 {table}
               </Button>
-              <Button onClick={() => cartDrawer.current.toggleDrawer()}>
-                <Badge badgeContent={12}>
+              <Button
+                onClick={() => {
+                  if (table === "未选择") {
+                    enqueueSnackbar("未选择桌位", { variant: "warning" });
+                  } else {
+                    cartDrawer.current.toggleDrawer();
+                  }
+                }}
+              >
+                <Badge
+                  badgeContent={
+                    cart?.sku?.cartMessage?.reduce(
+                      (previousValue: any, currentValue: any) => {
+                        return previousValue + currentValue.productNum;
+                      },
+                      0
+                    ) || 0
+                  }
+                >
                   <Typography fontSize="xl">🛍</Typography>
                 </Badge>
               </Button>
