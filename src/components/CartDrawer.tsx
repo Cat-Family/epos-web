@@ -18,7 +18,7 @@ import { useSnackbar } from "notistack";
 import Typography from "@mui/joy/Typography";
 import { List, ListItem } from "@mui/joy";
 import { Container } from "@mui/system";
-import CartItemCard from "./CartItemCard";
+import CartItemCard, { CartItemCardType } from "./CartItemCard";
 import Stack from "@mui/material/Stack";
 
 const CartDrawer = forwardRef((props, ref) => {
@@ -39,6 +39,12 @@ const CartDrawer = forwardRef((props, ref) => {
    */
   const toggleDrawer = (open: boolean) => setOpen(open);
 
+  const handlerOrder = async () => {
+    if (table !== "未选择") {
+      cartActions.orderSku(table);
+    }
+  };
+
   useLayoutEffect(() => {
     if (table !== "未选择") {
       cartActions.getCart(table);
@@ -50,6 +56,9 @@ const CartDrawer = forwardRef((props, ref) => {
     () => ({
       toggleDrawer() {
         setOpen((pre) => !pre);
+      },
+      closeDrawer() {
+        setOpen(false);
       },
     }),
     []
@@ -65,16 +74,23 @@ const CartDrawer = forwardRef((props, ref) => {
         onOpen={() => toggleDrawer(true)}
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
-        sx={{ zIndex: 1000 }}
+        sx={{
+          zIndex: 1000,
+        }}
       >
-        <AppBar position="static">
+        <AppBar position="static" sx={{ visibility: "hidden" }}>
           <Toolbar />
         </AppBar>
         <Box
           p={1}
           minWidth="100vw"
-          height="100%"
-          sx={{ display: "flex", flexDirection: "column" }}
+          flex={1}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            bgcolor: "background.paper",
+            pb: "80px",
+          }}
         >
           <Container
             sx={{
@@ -88,33 +104,46 @@ const CartDrawer = forwardRef((props, ref) => {
             <Typography>{`用餐人数：${cart?.sku?.persons}`}</Typography>
             <Stack spacing={2} p={1} sx={{ alignItems: "center" }}>
               {cart?.sku?.cartMessage?.length > 0 &&
-                cart?.sku?.cartMessage.map((item: any, index: number) => (
-                  <CartItemCard
-                    key={index}
-                    productName={item.productName}
-                    price={item.price}
-                    productNum={item.productNum}
-                    dishesInfo={item.dishesInfo}
-                    specification={item.specification}
-                    cartId={item.cartId}
-                    tableNum={cart?.sku?.tableNum}
-                  />
-                ))}
+                cart?.sku?.cartMessage.map(
+                  (item: CartItemCardType, index: number) => (
+                    <CartItemCard
+                      key={index}
+                      productName={item.productName}
+                      price={item.price}
+                      productNum={item.productNum}
+                      dishesInfo={item.dishesInfo}
+                      specification={item.specification}
+                      cartId={item.cartId}
+                      tableNum={cart?.sku?.tableNum}
+                    />
+                  )
+                )}
             </Stack>
             <Box
               sx={{
                 display: "flex",
+                position: "fixed",
+                bottom: 0,
+                right: 0,
+                left: 0,
                 flexDirection: "row-reverse",
                 gap: 2,
+                justifyContent: "center",
+                alignItems: "center",
+                p: 2,
               }}
+              height={45}
+              bgcolor="background.paper"
             >
-              <Button variant="outlined">下单</Button>
+              <Button variant="outlined" onClick={handlerOrder}>
+                下单
+              </Button>
               <Button variant="plain" onClick={() => toggleDrawer(false)}>
                 关闭
               </Button>
-              <Typography
-                flex={1}
-              >{`合计：${cart?.sku?.totalPrice}￥`}</Typography>
+              <Box flex={1}>
+                <Typography>{`合计：${cart?.sku?.totalPrice}￥`}</Typography>
+              </Box>
             </Box>
           </Container>
         </Box>

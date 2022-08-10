@@ -56,6 +56,8 @@ const AppLayout = () => {
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    cartDrawer.current.closeDrawer();
+
     setAnchorProfileMenu(event.currentTarget);
   };
 
@@ -79,7 +81,7 @@ const AppLayout = () => {
     <Menu
       anchorEl={anchorProfileMenu}
       id={profileMenuId}
-      keepMounted
+      // keepMounted
       open={isProfileMenuOpen}
       onClose={handleProfileMenuClose}
     >
@@ -95,7 +97,7 @@ const AppLayout = () => {
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
-        Settings
+        设置
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -107,7 +109,7 @@ const AppLayout = () => {
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
-        logout
+        注销
       </MenuItem>
       <Divider />
       <MenuItem
@@ -118,7 +120,7 @@ const AppLayout = () => {
           <Brightness7Outlined fontSize="small" />
           {/* <Brightness4Outlined fontSize="small" /> */}
         </ListItemIcon>
-        <Typography sx={{ flexGrow: "1" }}>Appearance</Typography>
+        <Typography sx={{ flexGrow: "1" }}>主题</Typography>
 
         <ListItemIcon sx={{ justifyContent: "end" }}>
           <ArrowForwardIosOutlined fontSize="small" />
@@ -128,7 +130,7 @@ const AppLayout = () => {
         <ListItemIcon>
           <GTranslateOutlined />
         </ListItemIcon>
-        <Typography sx={{ flexGrow: "1" }}>Language</Typography>
+        <Typography sx={{ flexGrow: "1" }}>语言</Typography>
         <ListItemIcon sx={{ justifyContent: "end" }}>
           <ArrowForwardIosOutlined fontSize="small" />
         </ListItemIcon>
@@ -185,7 +187,7 @@ const AppLayout = () => {
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          {/* <ModeToggle /> */}
+          <ModeToggle />
           <IconButton
             size="large"
             edge="end"

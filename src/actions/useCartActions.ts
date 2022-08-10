@@ -52,7 +52,24 @@ const useCartActions = () => {
     }
   };
 
-  return { getCart, postCart,operationSku};
+  const orderSku = async (tableNum: string) => {
+    try {
+      const res = await axiosInstance.post(
+        "/qy/api/orderMenu/customerOrderMenu",
+        {
+          tableNum,
+        }
+      );
+
+      await getCart(tableNum);
+
+      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  return { getCart, postCart, operationSku, orderSku };
 };
 
 export default useCartActions;
