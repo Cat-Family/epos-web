@@ -127,7 +127,14 @@ const ProductDialog = forwardRef((props, ref) => {
       onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle minWidth={280}>{productInfo.productName}</DialogTitle>
+      <DialogTitle
+        sx={{
+          bgcolor: "background.paper",
+        }}
+        minWidth={280}
+      >
+        {productInfo.productName}
+      </DialogTitle>
       <Box
         maxHeight={"50vh"}
         minHeight={"20vh"}
@@ -139,6 +146,7 @@ const ProductDialog = forwardRef((props, ref) => {
           justifyContent: "space-around",
           p: 2,
           overflow: "auto",
+          bgcolor: "background.paper",
         }}
         tabIndex={-1}
       >
@@ -308,7 +316,11 @@ const ProductDialog = forwardRef((props, ref) => {
           </>
         )}
       </Box>
-      <DialogActions>
+      <DialogActions
+        sx={{
+          bgcolor: "background.paper",
+        }}
+      >
         <Button variant="outlined" onClick={handleClose}>
           取消
         </Button>

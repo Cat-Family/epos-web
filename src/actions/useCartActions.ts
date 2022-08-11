@@ -61,6 +61,21 @@ const useCartActions = () => {
         }
       );
 
+      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const checkoutSku = async (tableNum: string) => {
+    try {
+      const res = await axiosInstance.post(
+        "/qy/api/orderMenu/statementOrderMenu",
+        {
+          tableNum,
+        }
+      );
+
       await getCart(tableNum);
 
       return Promise.resolve(res);
@@ -69,7 +84,21 @@ const useCartActions = () => {
     }
   };
 
-  return { getCart, postCart, operationSku, orderSku };
+  const changePs = async (tag: number, orderId: string, tableNum: string) => {
+    try {
+      const res = await axiosInstance.post("/qy/api/sku/operationPs", {
+        orderId,
+        tag,
+      });
+
+      await getCart(tableNum);
+
+      return Promise.resolve(res);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+  return { getCart, postCart, operationSku, orderSku, checkoutSku, changePs };
 };
 
 export default useCartActions;

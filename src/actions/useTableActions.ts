@@ -31,7 +31,27 @@ const useTableAction = () => {
       return Promise.reject(error);
     }
   };
-  return { getTables, openStage };
+
+  const switchTable = async (
+    orderId: string,
+    sourceTable: string,
+    targetTable: string
+  ) => {
+    try {
+      const res = await axiosInstance.post("/qy/api/sku/changeTable", {
+        orderId,
+        sourceTable,
+        targetTable,
+      });
+
+      // setTable(openStage);
+
+      return Promise.resolve(res);
+    } catch (error: any) {
+      return Promise.reject(error);
+    }
+  };
+  return { getTables, openStage, switchTable };
 };
 
 export default useTableAction;

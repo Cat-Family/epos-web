@@ -101,7 +101,48 @@ const CartDrawer = forwardRef((props, ref) => {
             maxWidth="sm"
           >
             <Typography>{`订单编号：${cart?.sku?.orderId}`}</Typography>
-            <Typography>{`用餐人数：${cart?.sku?.persons}`}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                m: "auto",
+                justifyContent: "left",
+                alignItems: "center",
+              }}
+            >
+              <Typography>{`用餐人数：`}</Typography>
+
+              <Button
+                onClick={() =>
+                  cartActions.changePs(
+                    1,
+                    cart?.sku?.orderId,
+                    cart?.sku?.tableNum
+                  )
+                }
+                variant="plain"
+                size="lg"
+                color="neutral"
+              >
+                -
+              </Button>
+
+              <Typography fontSize="lg">{cart?.sku?.persons}</Typography>
+              <Button
+                onClick={() =>
+                  cartActions.changePs(
+                    0,
+                    cart?.sku?.orderId,
+                    cart?.sku?.tableNum
+                  )
+                }
+                variant="plain"
+                size="lg"
+                color="neutral"
+              >
+                +
+              </Button>
+            </Box>
             <Stack spacing={2} p={1} sx={{ alignItems: "center" }}>
               {cart?.sku?.cartMessage?.length > 0 &&
                 cart?.sku?.cartMessage.map(
@@ -135,6 +176,14 @@ const CartDrawer = forwardRef((props, ref) => {
               height={45}
               bgcolor="background.paper"
             >
+              <Button
+                variant="soft"
+                onClick={() => {
+                  cartActions.checkoutSku(table);
+                }}
+              >
+                结账
+              </Button>
               <Button variant="outlined" onClick={handlerOrder}>
                 下单
               </Button>
