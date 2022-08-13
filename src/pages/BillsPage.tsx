@@ -64,7 +64,7 @@ function BillsPage() {
   useLayoutEffect(() => {
     billsActions.getBills({
       startTime: "2021-08-13T09:19:39.140Z",
-      endTime: "2022-08-13T09:19:39.140Z",
+      endTime: "2022-08-15T09:19:39.140Z",
     });
   }, []);
 

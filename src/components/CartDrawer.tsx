@@ -179,8 +179,13 @@ const CartDrawer = forwardRef((props, ref) => {
                 variant="soft"
                 endIcon={<KeyboardArrowRight />}
                 color="success"
-                onClick={() => {
-                  cartActions.checkoutSku(table);
+                onClick={async () => {
+                  try {
+                    await cartActions.checkoutSku(table);
+                    setOpen(false);
+                  } catch (err) {
+                    setOpen(false);
+                  }
                 }}
               >
                 结账
