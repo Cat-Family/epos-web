@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -65,11 +65,23 @@ const AppLayout = () => {
     setAnchorProfileMenu(null);
   };
 
-  const [value, setValue] = React.useState(
+  const [value, setValue] = useState<number>(
     location.pathname === "/" ? 0 : location.pathname === "/bills" ? 1 : 2
   );
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if (location.pathname === "/") {
+      setValue(0);
+    }
+    if (location.pathname === "/bills") {
+      setValue(1);
+    }
+    if (location.pathname === "/report") {
+      setValue(2);
+    }
+  }, [location.pathname]);
 
   const renderProfileMenu = (
     <Menu
@@ -212,8 +224,9 @@ const AppLayout = () => {
         <TableDrawer ref={tableDrawer} />
         <CartDrawer ref={cartDrawer} />
       </Box>
-      <BottomNavigation />
-
+      <Paper elevation={3}>
+        <BottomNavigation showLabels />
+      </Paper>
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
         elevation={3}
@@ -222,7 +235,6 @@ const AppLayout = () => {
           showLabels
           value={value}
           onChange={(event, newValue) => {
-            setValue(newValue);
             navigate(
               newValue === 0 ? "/" : newValue === 1 ? "/bills" : "/report"
             );

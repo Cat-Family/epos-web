@@ -11,15 +11,14 @@ import AppBar from "@mui/material/AppBar/AppBar";
 import { Toolbar } from "@mui/material";
 import useCartActions from "../actions/useCartActions";
 import { useRecoilState } from "recoil";
-import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";
 import cartState from "../state/cartState";
 import { useSnackbar } from "notistack";
 import Typography from "@mui/joy/Typography";
-import { List, ListItem } from "@mui/joy";
 import { Container } from "@mui/system";
 import CartItemCard, { CartItemCardType } from "./CartItemCard";
 import Stack from "@mui/material/Stack";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 const CartDrawer = forwardRef((props, ref) => {
   const cartActions = useCartActions();
@@ -178,16 +177,22 @@ const CartDrawer = forwardRef((props, ref) => {
             >
               <Button
                 variant="soft"
+                endIcon={<KeyboardArrowRight />}
+                color="success"
                 onClick={() => {
                   cartActions.checkoutSku(table);
                 }}
               >
                 结账
               </Button>
-              <Button variant="outlined" onClick={handlerOrder}>
+              <Button variant="soft" onClick={handlerOrder}>
                 下单
               </Button>
-              <Button variant="plain" onClick={() => toggleDrawer(false)}>
+              <Button
+                variant="outlined"
+                color="danger"
+                onClick={() => toggleDrawer(false)}
+              >
                 关闭
               </Button>
               <Box flex={1}>

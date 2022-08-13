@@ -7,7 +7,6 @@ import Chip from "@mui/joy/Chip";
 import Typography from "@mui/joy/Typography";
 import CardOverflow from "@mui/joy/CardOverflow";
 import useCartActions from "../actions/useCartActions";
-import LinearProgress from "@mui/material/LinearProgress";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSnackbar } from "notistack";

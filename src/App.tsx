@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AppLayout from "./Layout/AppLayout";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, MemoryRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import OrdersPage from "./pages/OrdersPage";
 import BillsPage from "./pages/BillsPage";
@@ -19,7 +19,7 @@ const App = () => {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<HomePage />} />
             <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/bills" element={<BillsPage />} />
+            <Route path="bills" element={<BillsPage />} />
             <Route path="/report" element={<ReportPage />} />
           </Route>
           <Route path="/users/signin" element={<SignInPage />} />
