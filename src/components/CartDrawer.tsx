@@ -95,7 +95,7 @@ const CartDrawer = forwardRef((props, ref) => {
             sx={{
               flexGrow: 1,
               justifyContent: "center",
-              alightItems: "center",
+              alignItems: "center",
             }}
             maxWidth="sm"
           >
@@ -142,7 +142,11 @@ const CartDrawer = forwardRef((props, ref) => {
                 +
               </Button>
             </Box>
-            <Stack spacing={2} p={1} sx={{ alignItems: "center" }}>
+            <Stack
+              spacing={2}
+              p={1}
+              sx={{ alignItems: "center", justifyContent: "center" }}
+            >
               {cart?.sku?.cartMessage?.length > 0 &&
                 cart?.sku?.cartMessage.map(
                   (item: CartItemCardType, index: number) => (

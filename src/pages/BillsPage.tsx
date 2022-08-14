@@ -19,6 +19,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import TextField from "@mui/material/TextField";
 import set from "date-fns/set";
 import Divider from "@mui/material/Divider";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function BillsPage() {
   const billsActions = useBillsActions();
@@ -26,7 +27,7 @@ function BillsPage() {
   const query = new URLSearchParams(location.search);
   const page = parseInt(query.get("page") || "1", 10);
   const [bills, setBills] = useRecoilState<any>(billsState);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const [data, setData] = useState<any>();
@@ -53,20 +54,25 @@ function BillsPage() {
   }, [open]);
 
   useLayoutEffect(() => {
-    billsActions.getBills({
-      startTime: set(value, {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 1,
-      }).toLocaleString(),
-      endTime: set(value, {
-        hours: 23,
-        minutes: 59,
-        seconds: 59,
-        milliseconds: 59,
-      }).toLocaleString(),
-    });
+    {
+      setLoading(true);
+      billsActions
+        .getBills({
+          startTime: set(value, {
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            milliseconds: 1,
+          }).toLocaleString(),
+          endTime: set(value, {
+            hours: 23,
+            minutes: 59,
+            seconds: 59,
+            milliseconds: 59,
+          }).toLocaleString(),
+        })
+        .finally(() => setLoading(false));
+    }
   }, [value]);
 
   return (
@@ -78,7 +84,7 @@ function BillsPage() {
       }}
     >
       <Container maxWidth="sm">
-        <Typography ml={2} pb={2} fontSize="lg">
+        <Typography ml={2} pb={2} pt={2} fontSize="lg">
           合计:{bills?.receivable || 0}元 实收:{bills?.receipts || 0}元
         </Typography>
         <Box
@@ -98,8 +104,16 @@ function BillsPage() {
         </Box>
 
         <Divider />
-        {!bills?.historyOrder && <Typography>此日账单数据为空r't</Typography>}
-        {bills?.historyOrder &&
+        {loading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
+        {!loading && !bills?.historyOrder && (
+          <Typography>此日账单数据为空</Typography>
+        )}
+        {!loading &&
+          bills?.historyOrder &&
           bills?.historyOrder?.map((bill: any) => (
             <Card
               key={bill.orderId}
