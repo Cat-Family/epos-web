@@ -19,6 +19,7 @@ import { Container } from "@mui/system";
 import CartItemCard, { CartItemCardType } from "./CartItemCard";
 import Stack from "@mui/material/Stack";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const CartDrawer = forwardRef((props, ref) => {
   const cartActions = useCartActions();
@@ -26,6 +27,7 @@ const CartDrawer = forwardRef((props, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   const [table, setTable] = useRecoilState(tableState);
   const [cart, setCart] = useRecoilState<any>(cartState);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const iOS =
     typeof navigator !== "undefined" &&
@@ -40,7 +42,13 @@ const CartDrawer = forwardRef((props, ref) => {
 
   const handlerOrder = async () => {
     if (table !== "未选择") {
-      cartActions.orderSku(table);
+      try {
+        setLoading(true);
+        await cartActions.orderSku(table);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+      }
     }
   };
 
@@ -112,13 +120,19 @@ const CartDrawer = forwardRef((props, ref) => {
               <Typography>{`用餐人数：`}</Typography>
 
               <Button
-                onClick={() =>
-                  cartActions.changePs(
-                    1,
-                    cart?.sku?.orderId,
-                    cart?.sku?.tableNum
-                  )
-                }
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    await cartActions.changePs(
+                      1,
+                      cart?.sku?.orderId,
+                      cart?.sku?.tableNum
+                    );
+                    setLoading(false);
+                  } catch (err) {
+                    setLoading(false);
+                  }
+                }}
                 variant="plain"
                 size="lg"
                 color="neutral"
@@ -128,13 +142,19 @@ const CartDrawer = forwardRef((props, ref) => {
 
               <Typography fontSize="lg">{cart?.sku?.persons}</Typography>
               <Button
-                onClick={() =>
-                  cartActions.changePs(
-                    0,
-                    cart?.sku?.orderId,
-                    cart?.sku?.tableNum
-                  )
-                }
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    await cartActions.changePs(
+                      0,
+                      cart?.sku?.orderId,
+                      cart?.sku?.tableNum
+                    );
+                    setLoading(false);
+                  } catch (error) {
+                    setLoading(false);
+                  }
+                }}
                 variant="plain"
                 size="lg"
                 color="neutral"
@@ -142,6 +162,11 @@ const CartDrawer = forwardRef((props, ref) => {
                 +
               </Button>
             </Box>
+            {loading && (
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress />
+              </Box>
+            )}
             <Stack
               spacing={2}
               p={1}
@@ -185,9 +210,12 @@ const CartDrawer = forwardRef((props, ref) => {
                 color="success"
                 onClick={async () => {
                   try {
+                    setLoading(true);
                     await cartActions.checkoutSku(table);
+                    setLoading(false);
                     setOpen(false);
                   } catch (err) {
+                    setLoading(false);
                     setOpen(false);
                   }
                 }}
