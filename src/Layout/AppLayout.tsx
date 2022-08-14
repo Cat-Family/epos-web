@@ -194,7 +194,7 @@ const AppLayout = () => {
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          <ModeToggle />
+          {/* <ModeToggle /> */}
           <IconButton
             size="large"
             edge="end"

@@ -19,9 +19,10 @@ const useBillsActions = () => {
       const response = await axiosInstance.post("/qy/api/sku/hostoryOrder", {
         ...params,
       });
-      setBills(response.data.data.historyOrder);
+      setBills(response.data.data);
       return Promise.resolve(response);
     } catch (error) {
+      setBills(undefined);
       return Promise.reject(error);
     }
   };

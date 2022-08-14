@@ -1,34 +1,24 @@
 import React, { useLayoutEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import PaginationItem from "@mui/material/PaginationItem";
 import { useLocation, Link } from "react-router-dom";
 import useBillsActions from "../actions/useBillsActions";
 import { useRecoilState } from "recoil";
 import billsState from "../state/billsState";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import JoyLink from "@mui/joy/Link";
-import IconButton from "@mui/joy/IconButton";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
-import MoreHoriz from "@mui/icons-material/MoreHoriz";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import SendOutlined from "@mui/icons-material/SendOutlined";
-import Face from "@mui/icons-material/Face";
-import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Container from "@mui/material/Container";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Stack from "@mui/joy/Stack";
-import CartItemCard, { CartItemCardType } from "../components/CartItemCard";
 import Chip from "@mui/joy/Chip";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import TextField from "@mui/material/TextField";
+import set from "date-fns/set";
+import Divider from "@mui/material/Divider";
 
 function BillsPage() {
   const billsActions = useBillsActions();
@@ -41,9 +31,10 @@ function BillsPage() {
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const [data, setData] = useState<any>();
 
-  const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
-    setOpen(true);
-    setScroll(scrollType);
+  const [value, setValue] = React.useState<Date>(new Date());
+
+  const handleChange = (newValue: Date | null) => {
+    setValue(newValue as Date);
   };
 
   const handleClose = () => {
@@ -63,10 +54,20 @@ function BillsPage() {
 
   useLayoutEffect(() => {
     billsActions.getBills({
-      startTime: "2021-08-13T09:19:39.140Z",
-      endTime: "2022-08-15T09:19:39.140Z",
+      startTime: set(value, {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 1,
+      }).toLocaleString(),
+      endTime: set(value, {
+        hours: 23,
+        minutes: 59,
+        seconds: 59,
+        milliseconds: 59,
+      }).toLocaleString(),
     });
-  }, []);
+  }, [value]);
 
   return (
     <Box
@@ -77,8 +78,29 @@ function BillsPage() {
       }}
     >
       <Container maxWidth="sm">
-        {bills &&
-          bills?.map((bill: any) => (
+        <Typography ml={2} pb={2} fontSize="lg">
+          合计:{bills?.receivable || 0}元 实收:{bills?.receipts || 0}元
+        </Typography>
+        <Box
+          pt={2}
+          pb={2}
+          ml={2}
+          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+        >
+          <MobileDatePicker
+            label="日期"
+            inputFormat="MM/dd/yyyy"
+            value={value}
+            onChange={handleChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <Typography>的账单：</Typography>
+        </Box>
+
+        <Divider />
+        {!bills?.historyOrder && <Typography>此日账单数据为空r't</Typography>}
+        {bills?.historyOrder &&
+          bills?.historyOrder?.map((bill: any) => (
             <Card
               key={bill.orderId}
               variant="outlined"
@@ -109,6 +131,14 @@ function BillsPage() {
                     sx={{ color: "text.tertiary" }}
                   >
                     合计 {bill.totalPrice}￥
+                  </Typography>{" "}
+                  <Typography
+                    fontSize="sm"
+                    aria-describedby="card-description"
+                    mb={1}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    实收 {bill.receiptsPrice}￥
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -122,10 +152,10 @@ function BillsPage() {
                     }}
                   >
                     <Typography fontSize="lg">
-                      {new Date(bill.createTime).toLocaleDateString()}
+                      {bill.createTime.split(" ")[0]}
                     </Typography>
                     <Typography fontSize="lg">
-                      {new Date(bill.createTime).toLocaleTimeString()}
+                      {bill.createTime.split(" ")[1]}
                     </Typography>
                   </Box>
                 </Box>
@@ -196,6 +226,7 @@ function BillsPage() {
           {data?.cartMessage?.length > 0 &&
             data.cartMessage.map((item: any, index: number) => (
               <Card
+                key={item.cartId}
                 variant="outlined"
                 row={false}
                 sx={{
