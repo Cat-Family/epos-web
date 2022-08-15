@@ -11,15 +11,11 @@ import useUserActions from "../actions/useUserActions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, TypeOf } from "yup";
-import LoadingButton from "@mui/lab/LoadingButton";
-import IconButton from "@mui/joy/IconButton";
-import Input from "@mui/joy/Input";
-import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
-import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import Box from "@mui/joy/Box";
-// import TextField from "@mui/joy/TextField";
 import Button from "@mui/joy/Button";
 import AspectRatio from "@mui/joy/AspectRatio";
+import CircularProgress from "@mui/material/CircularProgress";
+import { green } from "@mui/material/colors";
 
 function Copyright(props: any) {
   return (
@@ -66,7 +62,7 @@ export default function SignInSide() {
 
   const onsubmit = async (value: ValidationInput) => {
     setLoading(true);
-    const res = await userActions.login(
+    await userActions.login(
       value.storeCode as string,
       value.username as string,
       value.password as string
@@ -155,15 +151,33 @@ export default function SignInSide() {
               error={errors.hasOwnProperty("password")}
               helperText={errors.password?.message}
             />
-            <Button
-              type="submit"
-              fullWidth
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}
-              // loading={loading}
-            >
-              登录
-            </Button>
+            <Box sx={{ m: 1, position: "relative" }}>
+              <Button
+                type="submit"
+                fullWidth
+                disabled={loading}
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+
+                // loading={loading}
+              >
+                登录
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    color: green[500],
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              )}
+            </Box>
+
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

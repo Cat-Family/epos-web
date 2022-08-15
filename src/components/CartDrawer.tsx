@@ -77,6 +77,7 @@ const CartDrawer = forwardRef((props, ref) => {
         anchor="right"
         variant="temporary"
         open={open}
+        disableSwipeToOpen
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}
         disableBackdropTransition={!iOS}

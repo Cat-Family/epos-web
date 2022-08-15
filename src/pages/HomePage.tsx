@@ -57,14 +57,13 @@ export default function HomePage() {
                 position: "fixed",
                 borderRight: 1,
                 borderColor: "divider",
+                overflowY: "auto",
               }}
             >
               <TabList
                 orientation="vertical"
                 value={value}
                 variant="scrollable"
-                allowScrollButtonsMobile={true}
-                scrollButtons="auto"
                 onChange={handleChange}
                 aria-label="tabs"
               >
@@ -75,6 +74,7 @@ export default function HomePage() {
                     value={item.categoryType.toString()}
                   />
                 ))}
+                <br />
               </TabList>
             </Box>
             <Box sx={{ flexGrow: 1, pl: "5rem" }}>

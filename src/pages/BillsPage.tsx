@@ -63,13 +63,13 @@ function BillsPage() {
             minutes: 0,
             seconds: 0,
             milliseconds: 1,
-          }).toLocaleString(),
+          }).getTime(),
           endTime: set(value, {
             hours: 23,
             minutes: 59,
             seconds: 59,
             milliseconds: 59,
-          }).toLocaleString(),
+          }).getTime(),
         })
         .finally(() => setLoading(false));
     }
@@ -99,6 +99,7 @@ function BillsPage() {
             value={value}
             onChange={handleChange}
             renderInput={(params) => <TextField {...params} />}
+            disableFuture
           />
           <Typography>的账单：</Typography>
         </Box>

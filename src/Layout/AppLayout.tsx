@@ -18,6 +18,7 @@ import {
   GTranslateOutlined,
   Logout,
   Settings,
+  SyncAltOutlined,
 } from "@mui/icons-material";
 import {
   IconButton,
@@ -25,7 +26,6 @@ import {
   Avatar,
   ListItemIcon,
   Divider,
-  Button,
 } from "@mui/material";
 import { useRecoilState } from "recoil";
 import TableDrawer from "../components/TableDrawer";
@@ -38,6 +38,7 @@ import tableState from "../state/tableState";
 import cartState from "../state/cartState";
 import { ModeToggle } from "../app/theme";
 import { enqueueSnackbar } from "notistack";
+import Button from "@mui/joy/Button";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -145,7 +146,15 @@ const AppLayout = () => {
   );
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <AppBar position="fixed">
+      <AppBar
+        position="fixed"
+        sx={
+          {
+            // backdropFilter: "blur(20px)",
+            // bgcolor: "primary.AppBar",
+          }
+        }
+      >
         <Toolbar>
           <Link to="/">
             <img
@@ -160,8 +169,26 @@ const AppLayout = () => {
           {location.pathname === "/" && (
             <>
               <Button
-                sx={{ fontSize: "1.2rem" }}
-                color="inherit"
+                aria-label="switch-table"
+                variant="plain"
+                color="neutral"
+                disabled={table === "未选择"}
+                sx={{ color: "inherit" }}
+                onClick={() => {
+                  if (table === "未选择") {
+                    enqueueSnackbar("未选择桌位", { variant: "warning" });
+                  } else {
+                    tableDrawer.current.switchTable();
+                  }
+                }}
+              >
+                <SyncAltOutlined />
+              </Button>
+              <Button
+                aria-label="table-number"
+                sx={{ fontSize: "1.2rem", color: "inherit" }}
+                color="neutral"
+                variant="plain"
                 onClick={() => {
                   tableDrawer.current.toggleDrawer();
                 }}
@@ -169,6 +196,9 @@ const AppLayout = () => {
                 {table}
               </Button>
               <Button
+                aria-label="cart-number"
+                variant="plain"
+                disabled={table === "未选择"}
                 onClick={() => {
                   if (table === "未选择") {
                     enqueueSnackbar("未选择桌位", { variant: "warning" });
@@ -188,13 +218,15 @@ const AppLayout = () => {
                     ) || 0
                   }
                 >
-                  <Typography fontSize="xl">🛍</Typography>
+                  <Typography sx={{ color: "inherit" }} fontSize="xl">
+                    🛍
+                  </Typography>
                 </Badge>
               </Button>
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          {/* <ModeToggle /> */}
+          <ModeToggle />
           <IconButton
             size="large"
             edge="end"

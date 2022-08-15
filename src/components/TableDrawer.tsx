@@ -13,6 +13,7 @@ import useTableAction from "../actions/useTableActions";
 import { useRecoilState } from "recoil";
 import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";
+import cartState from "../state/cartState";
 import { useSnackbar } from "notistack";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -28,8 +29,10 @@ const TableDrawer = forwardRef((props, ref) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [openStage, setOpenStage] = useState<string>("");
   const [toll, setToll] = useState<number>(1);
+  const [switchTable, setSwitchTable] = useState<boolean>(false);
   const [tables, setTables] = useRecoilState(tablesState);
   const [table, setTable] = useRecoilState(tableState);
+  const [cart, setCart] = useRecoilState<any>(cartState);
 
   const iOS =
     typeof navigator !== "undefined" &&
@@ -77,9 +80,15 @@ const TableDrawer = forwardRef((props, ref) => {
     () => ({
       toggleDrawer() {
         setOpen((pre) => !pre);
+        setSwitchTable(false);
       },
       closeDrawer() {
         setOpen(false);
+        setSwitchTable(false);
+      },
+      switchTable() {
+        setOpen((pre) => !pre);
+        setSwitchTable(true);
       },
     }),
     []
@@ -91,7 +100,14 @@ const TableDrawer = forwardRef((props, ref) => {
         anchor="top"
         variant="temporary"
         open={open}
-        onClose={() => toggleDrawer(false)}
+        onClose={() => {
+          if (switchTable) {
+            setOpen(false);
+            setSwitchTable(false);
+          } else {
+            toggleDrawer(false);
+          }
+        }}
         onOpen={() => toggleDrawer(true)}
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
@@ -105,12 +121,24 @@ const TableDrawer = forwardRef((props, ref) => {
             {tables.length > 0 &&
               tables.map((item: any, index: number) => (
                 <Button
+                  disabled={
+                    (switchTable && item.isLock === 1) ||
+                    item.tableNum === table
+                  }
                   key={index}
                   variant={item.isLock === 0 ? "outlined" : "soft"}
                   sx={{ width: 58, m: 1, height: 50 }}
-                  onClick={() => {
-                    if (item.tableNum === table) {
-                      enqueueSnackbar("重复选择餐桌", { variant: "warning" });
+                  onClick={async () => {
+                    if (switchTable) {
+                      try {
+                        await tableActions.switchTable(
+                          cart.sku.orderId,
+                          table,
+                          item.tableNum
+                        );
+                        setOpen(false);
+                        setSwitchTable(false);
+                      } catch (err) {}
                     } else {
                       if (item.isLock === 0) {
                         setOpenStage(item.tableNum);

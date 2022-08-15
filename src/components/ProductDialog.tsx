@@ -26,6 +26,8 @@ import { useSnackbar } from "notistack";
 import Add from "@mui/icons-material/Add";
 import tableState from "../state/tableState";
 import useCartActions from "../actions/useCartActions";
+import CircularProgress from "@mui/material/CircularProgress";
+import { green } from "@mui/material/colors";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -54,6 +56,7 @@ const ProductDialog = forwardRef((props, ref) => {
   const [table, setTable] = useRecoilState(tableState);
   const [specification, setSpecification] = useState<string>();
   const [price, setPrice] = useState<any>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [productInfo, setProductInfo] = useState<Product>({
     productName: "",
     dishes: [],
@@ -100,6 +103,7 @@ const ProductDialog = forwardRef((props, ref) => {
   }, [open]);
 
   const handleToCart = async () => {
+    setLoading(true);
     try {
       const res = await cartActions.postCart({
         tableNum: table,
@@ -112,10 +116,11 @@ const ProductDialog = forwardRef((props, ref) => {
         },
       });
       await cartActions.getCart(table);
-
+      setLoading(false);
       enqueueSnackbar("添加成功", { variant: "success" });
       handleClose();
     } catch (error: any) {
+      setLoading(false);
       enqueueSnackbar(error.message, { variant: "error" });
     }
   };
@@ -150,6 +155,20 @@ const ProductDialog = forwardRef((props, ref) => {
         }}
         tabIndex={-1}
       >
+        <FormLabel
+          id="storage-label"
+          sx={{
+            mb: 2,
+            textTransform: "uppercase",
+            fontSize: "sm",
+          }}
+        >
+          单价：
+          {productInfo.specification?.length > 0
+            ? price
+            : productInfo.productPrice}{" "}
+          元/份
+        </FormLabel>
         <FormLabel
           id="storage-label"
           sx={{
@@ -324,9 +343,24 @@ const ProductDialog = forwardRef((props, ref) => {
         <Button variant="outlined" onClick={handleClose}>
           取消
         </Button>
-        <Button startIcon={<Add />} onClick={() => handleToCart()}>
-          加入购物车
-        </Button>
+        <Box sx={{ m: 1, position: "relative" }}>
+          <Button startIcon={<Add />} onClick={handleToCart} disabled={loading}>
+            加入购物车
+          </Button>
+          {loading && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: green[500],
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
       </DialogActions>
     </Dialog>
   );

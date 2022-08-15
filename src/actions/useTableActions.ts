@@ -1,11 +1,14 @@
 import axiosInstance from "../app/request";
 import { useRecoilState } from "recoil";
 import tablesState from "../state/tablesState";
+import tableState from "../state/tableState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 
 const useTableAction = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [tables, setTables] = useRecoilState(tablesState);
+  const [table, setTable] = useRecoilState(tableState);
 
   const getTables = async () => {
     try {
@@ -25,9 +28,12 @@ const useTableAction = () => {
         tableNum,
         persons,
       });
-
+      enqueueSnackbar(res.data.message, { variant: "success" });
       return Promise.resolve(res);
     } catch (error: any) {
+      enqueueSnackbar(error.data.message || error.message, {
+        variant: "error",
+      });
       return Promise.reject(error);
     }
   };
@@ -43,11 +49,13 @@ const useTableAction = () => {
         sourceTable,
         targetTable,
       });
-
-      // setTable(openStage);
-
+      setTable(targetTable);
+      enqueueSnackbar(res.data.message, { variant: "success" });
       return Promise.resolve(res);
     } catch (error: any) {
+      enqueueSnackbar(error.data.message || error.message, {
+        variant: "error",
+      });
       return Promise.reject(error);
     }
   };
