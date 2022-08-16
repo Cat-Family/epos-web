@@ -13,6 +13,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import { useLocation } from "react-router-dom";
 import useLoginOutActions from "../actions/useUserActions";
 import {
+  AdminPanelSettingsOutlined,
   ArrowForwardIosOutlined,
   Brightness7Outlined,
   GTranslateOutlined,
@@ -20,13 +21,7 @@ import {
   Settings,
   SyncAltOutlined,
 } from "@mui/icons-material";
-import {
-  IconButton,
-  Toolbar,
-  Avatar,
-  ListItemIcon,
-  Divider,
-} from "@mui/material";
+import { IconButton, Toolbar, ListItemIcon, Divider } from "@mui/material";
 import { useRecoilState } from "recoil";
 import TableDrawer from "../components/TableDrawer";
 import CartDrawer from "../components/CartDrawer";
@@ -39,6 +34,7 @@ import cartState from "../state/cartState";
 import { ModeToggle } from "../app/theme";
 import { enqueueSnackbar } from "notistack";
 import Button from "@mui/joy/Button";
+import Avatar from "@mui/joy/Avatar";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -93,9 +89,14 @@ const AppLayout = () => {
       onClose={handleProfileMenuClose}
     >
       <MenuItem>
-        <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
+        <Avatar sx={{ borderRadius: "sm" }} />
       </MenuItem>
-
+      <MenuItem onClick={handleProfileMenuClose} component={Link} to="/studio">
+        <ListItemIcon>
+          <AdminPanelSettingsOutlined fontSize="small" />
+        </ListItemIcon>
+        店铺
+      </MenuItem>
       <MenuItem
         onClick={handleProfileMenuClose}
         component={Link}
@@ -236,7 +237,11 @@ const AppLayout = () => {
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            <Avatar src="https://mui.com/static/images/avatar/1.jpg"></Avatar>
+            <Avatar
+              sx={{
+                borderRadius: "sm",
+              }}
+            />
           </IconButton>
         </Toolbar>
         {renderProfileMenu}

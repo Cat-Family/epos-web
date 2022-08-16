@@ -86,8 +86,8 @@ const useCartActions = () => {
       return Promise.resolve(res);
     } catch (error: any) {
       enqueueSnackbar(error.message, { variant: "error" });
-      setCart({ sku: {} });
-      setTable("未选择");
+      // setCart({ sku: {} });
+      // setTable("未选择");
       return Promise.reject(error);
     }
   };

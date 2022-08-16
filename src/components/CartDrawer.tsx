@@ -217,7 +217,7 @@ const CartDrawer = forwardRef((props, ref) => {
                     setOpen(false);
                   } catch (err) {
                     setLoading(false);
-                    setOpen(false);
+                    // setOpen(false);
                   }
                 }}
               >

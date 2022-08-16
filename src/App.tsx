@@ -13,6 +13,7 @@ import { deepmerge } from "@mui/utils";
 import { CssVarsProvider } from "@mui/joy";
 import { muiTheme, joyTheme } from "./app/theme";
 import zhLocale from "date-fns/locale/zh-CN";
+import StudioLayout from "./Layout/StudioLayout";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
               <Route path="/report" element={<ReportPage />} />
             </Route>
             <Route path="/users/signin" element={<SignInPage />} />
+            <Route path="/studio" element={<StudioLayout />}></Route>
           </Routes>
         </LocalizationProvider>
       </SnackbarProvider>
