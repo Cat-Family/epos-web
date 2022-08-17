@@ -12,6 +12,8 @@ import tableState from "../state/tableState";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import TabScrollButton from "@mui/material/TabScrollButton";
+import Copyright from "../components/Copyright";
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

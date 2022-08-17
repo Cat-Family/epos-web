@@ -16,24 +16,7 @@ import Button from "@mui/joy/Button";
 import AspectRatio from "@mui/joy/AspectRatio";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://github.com/Cat-Family">
-        Cat Family
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "../components/Copyright";
 
 // form validation rules
 const validationSchema = object({

@@ -9,7 +9,7 @@ import { enqueueSnackbar } from "notistack";
 
 // export const baseURL: string = "https://2904084071.eicp.vip";
 // export const baseURL: string = "http://127.0.0.1:8083";
-export const baseURL: string = "http://81.70.97.93";
+export const baseURL: string = "https://qianyushop.shop";
 
 const PUBLICKEY = import.meta.env.VITE_PUBLICKEY;
 const encrypt = new JSEncrypt();

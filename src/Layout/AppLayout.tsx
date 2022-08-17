@@ -35,6 +35,7 @@ import { ModeToggle } from "../app/theme";
 import { enqueueSnackbar } from "notistack";
 import Button from "@mui/joy/Button";
 import Avatar from "@mui/joy/Avatar";
+import Copyright from "../components/Copyright";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -255,9 +256,11 @@ const AppLayout = () => {
           display: "flex",
           flexGrow: 1,
           overflow: "auto",
+          flexDirection: "column",
         }}
       >
         <Outlet />
+        <Copyright sx={{ m: 1 }} />
         <TableDrawer ref={tableDrawer} />
         <CartDrawer ref={cartDrawer} />
       </Box>
