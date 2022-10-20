@@ -1890,10 +1890,10 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-i18next@^21.9.0:
-  version "21.9.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.9.0.tgz#b63ebb0d4e1b23709951ca4774dc19d2ffac9553"
-  integrity sha512-B+6/yd7rCpJidyPuBaEApUECx7G8Ai6+tqYhrChsY4MmQqJhG7qJ4eT6Lm1OnRhieVelEtfxh4aAQktdNVZtDA==
+i18next@^22.0.1:
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.0.1.tgz#cf21f5152c8cf4d29341ff44818cfe9f12fec87b"
+  integrity sha512-CRbtl6urEcIDbIzP4sGoPf9YuDNto1JgCRsfdvcVUOPb8nPAQ0azhPZiSdD5AFg/Erb58+/nDRmhm8bzVyjABQ==
   dependencies:
     "@babel/runtime" "^7.17.2"
 
