@@ -21,6 +21,7 @@ let clientId: string | null = localStorage.getItem("clientId");
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   withCredentials: true,
+  timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(

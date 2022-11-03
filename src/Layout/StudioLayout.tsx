@@ -485,7 +485,7 @@ export default function StudioLayout() {
                 <Button
                   size="sm"
                   variant="plain"
-                  endIcon={<KeyboardArrowRightRoundedIcon fontSize="small" />}
+                  endicon={<KeyboardArrowRightRoundedIcon fontSize="small" />}
                   sx={{ px: 1, mt: 1 }}
                 >
                   Expand
