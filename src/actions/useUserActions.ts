@@ -3,57 +3,84 @@ import axiosInstance from "../app/request";
 import authAtom from "../state/authState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import basicAtom from "../state/basicState";
+import storeAtom from "../state/storeState";
+import printerAtom from "../state/printerState";
 
 const userActions = () => {
-  const [auth, setAuth] = useRecoilState(authAtom);
-  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const [basic, setBasic] = useRecoilState(basicAtom);
+  const [store, setStore] = useRecoilState(storeAtom);
+  const [printer, setPrinter] = useRecoilState(printerAtom);
 
   /**
    *
    * @param storeCode
-   * @param username
+   * @param userName
    * @param password
-   * @returns accessToken, refreshToken
+   * @returns loginInfo
    */
   const login = async (
     storeCode: string,
-    username: string,
-    password: string
+    userName: string,
+    password: string | false
   ) => {
     try {
-      const res = await axiosInstance.post("/qy/api/user/loginByUp", {
-        storeCode,
-        username,
-        password,
-      });
-      setAuth(res.data);
-      localStorage.setItem("refreshToken", res.data.data.refreshToken);
-      localStorage.setItem("accessToken", res.data.data.accessToken);
-      localStorage.setItem("clientId", res.data.data.clientId);
+      const { data } = await axiosInstance.post(
+        "/api/user/userLogin/magicApiJSON.do",
+        {
+          storeCode,
+          userName,
+          password,
+        }
+      );
+
+      setAuth(data.loginInfo.authInfo);
+      localStorage.setItem("authInfo", JSON.stringify(data.loginInfo.authInfo));
+
       enqueueSnackbar("登录成功", { variant: "info" });
       navigate(location.search.replace("?redirect=", "") || "/", {
         replace: true,
       });
-      return res;
+      return data.loginInfo;
     } catch (error: any) {
-      enqueueSnackbar(error.message, { variant: "error" });
+      console.log(error);
+      enqueueSnackbar(error.message || "Network error", { variant: "error" });
       return error;
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const user = await axiosInstance.post(
+        "api/user/userInfo/magicApiJSON.do",
+        {
+          authInfo: {
+            ...JSON.parse(localStorage.getItem("authInfo") as string),
+            reqTime: new Date().toLocaleString(),
+            reqUid: "test",
+          },
+        }
+      );
+      return user;
+    } catch (err) {
+      return Promise.reject(err);
     }
   };
 
   const loginOut = async () => {
     try {
       // await axiosInstance.post("/qy/api/user/loginOut");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("clientId");
+      localStorage.removeItem("authInfo");
     } catch (error: any) {
       return error;
     }
   };
 
-  return { login, loginOut };
+  return { login, loginOut, getUser };
 };
 
 export default userActions;

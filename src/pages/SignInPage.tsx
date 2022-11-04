@@ -17,6 +17,9 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 
+import CryptoJS from "crypto-js";
+import JSEncrypt from "jsencrypt";
+
 function Copyright(props: any) {
   return (
     <Typography
@@ -62,12 +65,18 @@ export default function SignInSide() {
 
   const onsubmit = async (value: ValidationInput) => {
     setLoading(true);
-    await userActions.login(
-      value.storeCode as string,
-      value.username as string,
-      value.password as string
-    );
-    setLoading(false);
+
+    if (value.storeCode && value.username && value.password) {
+      const hash = CryptoJS.SHA3(value.password as string, {
+        outputLength: 512,
+      });
+      const jsencrypt = new JSEncrypt({});
+      jsencrypt.setPublicKey(import.meta.env.VITE_PUBLIC_KEY);
+      const password = jsencrypt.encrypt(hash.toString(CryptoJS.enc.Base64));
+
+      await userActions.login(value.storeCode, value.username, password);
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,7 +98,7 @@ export default function SignInSide() {
           <img
             src="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
             srcSet="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
-            alt="A beautiful landscape."
+            alt="logo"
           />
         </AspectRatio>
       </Grid>
@@ -103,9 +112,7 @@ export default function SignInSide() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>千</Avatar>
           <Typography component="h1" variant="h5">
             登 录
           </Typography>

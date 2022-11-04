@@ -12,6 +12,7 @@ import tableState from "../state/tableState";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import TabScrollButton from "@mui/material/TabScrollButton";
+import { useNavigate } from "react-router-dom";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -25,15 +26,15 @@ export default function HomePage() {
   const [value, setValue] = useState<string>("");
   const [table, setTable] = useRecoilState(tableState);
 
-  useLayoutEffect(() => {
-    menuAction.getMenu();
-  }, []);
+  // useLayoutEffect(() => {
+  //   menuAction.getMenu();
+  // }, []);
 
-  useLayoutEffect(() => {
-    if (menu[0]?.categoryType) {
-      setValue(menu[0].categoryType.toString());
-    }
-  }, [menu]);
+  // useLayoutEffect(() => {
+  //   if (menu[0]?.categoryType) {
+  //     setValue(menu[0].categoryType.toString());
+  //   }
+  // }, [menu]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
