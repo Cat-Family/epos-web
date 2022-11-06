@@ -11,7 +11,7 @@ import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import DiningOutlined from "@mui/icons-material/DiningOutlined";
 import RestoreIcon from "@mui/icons-material/Restore";
 import { useLocation } from "react-router-dom";
-import useLoginOutActions from "../actions/useUserActions";
+import useLoginOutActions from "../hooks/useUserActions";
 import {
   AdminPanelSettingsOutlined,
   ArrowForwardIosOutlined,

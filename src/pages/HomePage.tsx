@@ -3,7 +3,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useRecoilState } from "recoil";
 import menuState from "../state/menuState";
-import useMenuAction from "../actions/useMenuActions";
+import useMenuAction from "../hooks/useMenuActions";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProductDialog from "../components/ProductDialog";
 import Skeleton from "@mui/material/Skeleton";

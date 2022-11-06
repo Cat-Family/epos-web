@@ -9,7 +9,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/joy/Button";
 import AppBar from "@mui/material/AppBar/AppBar";
 import { Toolbar } from "@mui/material";
-import useCartActions from "../actions/useCartActions";
+import useCartActions from "../hooks/useCartActions";
 import { useRecoilState } from "recoil";
 import tableState from "../state/tableState";
 import cartState from "../state/cartState";
@@ -207,7 +207,7 @@ const CartDrawer = forwardRef((props, ref) => {
             >
               <Button
                 variant="soft"
-                endicon={<KeyboardArrowRight />}
+                // endicon={<KeyboardArrowRight />}
                 color="success"
                 onClick={async () => {
                   try {

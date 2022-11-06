@@ -1,10 +1,10 @@
 import { atom } from "recoil";
 
-const authAtom = atom({
+const cartAtom = atom({
   key: "cart",
   default: {
     sku: {},
   },
 });
 
-export default authAtom;
+export default cartAtom;

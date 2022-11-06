@@ -54,7 +54,7 @@ const userActions = () => {
   const getUser = async () => {
     try {
       const { data } = await axiosInstance.post(
-        "api/user/userInfo/magicApiJSON.do",
+        "/api/user/userInfo/magicApiJSON.do",
         {
           authInfo: {
             ...JSON.parse(localStorage.getItem("authInfo") as string),
@@ -79,6 +79,10 @@ const userActions = () => {
     try {
       // await axiosInstance.post("/qy/api/user/loginOut");
       localStorage.removeItem("authInfo");
+      localStorage.removeItem("userInfo");
+
+      setUserInfo(null);
+      setAuth(null);
     } catch (error: any) {
       return error;
     }

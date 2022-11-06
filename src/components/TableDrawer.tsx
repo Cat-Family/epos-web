@@ -9,7 +9,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/joy/Button";
 import AppBar from "@mui/material/AppBar/AppBar";
 import { Toolbar } from "@mui/material";
-import useTableAction from "../actions/useTableActions";
+import useTableAction from "../hooks/useTableActions";
 import { useRecoilState } from "recoil";
 import tablesState from "../state/tablesState";
 import tableState from "../state/tableState";

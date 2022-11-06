@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import useBillsActions from "../actions/useBillsActions";
+import useBillsActions from "../hooks/useBillsActions";
 import { useRecoilState } from "recoil";
 import billsState from "../state/billsState";
 import Box from "@mui/joy/Box";
