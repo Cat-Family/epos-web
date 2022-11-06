@@ -27,6 +27,15 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   async (responseConfig: AxiosResponse) => {
     if (responseConfig.data.code == 10000) {
+      if (responseConfig.config.url === "/api/user/userLogin/magicApiJSON.do") {
+        if (responseConfig.data.data.loginInfo.authInfo.blackList) {
+          return Promise.reject({
+            ...responseConfig.data,
+            message: "环境异常",
+          });
+        }
+        return Promise.resolve(responseConfig.data);
+      }
       return Promise.resolve(responseConfig.data);
     }
 

@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import AppLayout from "./Layout/AppLayout";
-import { Routes, Route, redirect, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider, zhCN } from "@mui/x-date-pickers";
 import HomePage from "./pages/HomePage";
@@ -17,13 +17,18 @@ import StudioLayout from "./Layout/StudioLayout";
 import userActions from "./actions/useUserActions";
 import { useRecoilState } from "recoil";
 import authAtom from "./state/authState";
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   const user = userActions();
+  const [auth] = useRecoilState(authAtom);
 
-  if (authAtom) {
-    user.getUser();
-  }
+  useLayoutEffect(() => {
+    if (auth) {
+      user.getUser();
+    }
+  }, []);
+
   return (
     <CssVarsProvider theme={deepmerge(muiTheme, joyTheme)}>
       <SnackbarProvider autoHideDuration={1000} dense>
@@ -35,22 +40,28 @@ const App = () => {
           }
         >
           <Routes>
-            <Route path="/" element={<AppLayout />}>
-              <Route
-                index
-                element={
-                  <React.Suspense fallback={<div>loading</div>}>
-                    <HomePage />
-                  </React.Suspense>
-                }
-              />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="bills" element={<BillsPage />} />
-              <Route path="/report" element={<ReportPage />} />
+            <Route element={<RequireAuth allowedRoles={[19999]} />}>
+              <Route path="/" element={<AppLayout />}>
+                <Route
+                  index
+                  element={
+                    <React.Suspense fallback={<div>loading</div>}>
+                      <HomePage />
+                    </React.Suspense>
+                  }
+                />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="bills" element={<BillsPage />} />
+                <Route path="/report" element={<ReportPage />} />
+              </Route>
             </Route>
-            <Route path="/studio" element={<StudioLayout />}></Route>
+            <Route element={<RequireAuth allowedRoles={[29999]} />}>
+              <Route path="/studio" element={<StudioLayout />}></Route>
+            </Route>
+            <Route path="*" element={<div>Not Found</div>} />
 
             <Route path="/users/signin" element={<SignInPage />} />
+            <Route path="/unauthorized" element={<div>unauthorized</div>} />
           </Routes>
         </LocalizationProvider>
       </SnackbarProvider>

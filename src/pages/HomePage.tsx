@@ -119,12 +119,12 @@ export default function HomePage() {
           </TabContext>
         )}
       </Box>
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={Boolean(!value)}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
       <ProductDialog ref={productDialog} />
     </Box>
   );

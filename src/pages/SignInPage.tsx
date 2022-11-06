@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import useUserActions from "../actions/useUserActions";
 import { useForm } from "react-hook-form";
@@ -112,7 +111,7 @@ export default function SignInSide() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>千</Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>掌</Avatar>
           <Typography component="h1" variant="h5">
             登 录
           </Typography>

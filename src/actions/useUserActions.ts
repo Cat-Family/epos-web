@@ -1,20 +1,18 @@
 import { useRecoilState } from "recoil";
 import axiosInstance from "../app/request";
-import authAtom from "../state/authState";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import basicAtom from "../state/basicState";
-import storeAtom from "../state/storeState";
-import printerAtom from "../state/printerState";
+import CryptoJS from "crypto-js";
+
+import authAtom from "../state/authState";
+import userInfoAtom from "../state/userState";
 
 const userActions = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const [auth, setAuth] = useRecoilState(authAtom);
-  const [basic, setBasic] = useRecoilState(basicAtom);
-  const [store, setStore] = useRecoilState(storeAtom);
-  const [printer, setPrinter] = useRecoilState(printerAtom);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
 
   /**
    *
@@ -55,17 +53,23 @@ const userActions = () => {
 
   const getUser = async () => {
     try {
-      const user = await axiosInstance.post(
+      const { data } = await axiosInstance.post(
         "api/user/userInfo/magicApiJSON.do",
         {
           authInfo: {
             ...JSON.parse(localStorage.getItem("authInfo") as string),
-            reqTime: new Date().toLocaleString(),
-            reqUid: "test",
+            reqTime: new Date().getTime(),
+            reqUid: CryptoJS.MD5(
+              new Date().getTime() + auth.tenantId + auth.userName
+            ).toString(),
           },
         }
       );
-      return user;
+
+      setUserInfo(data.userInfo);
+      localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+
+      return data;
     } catch (err) {
       return Promise.reject(err);
     }
