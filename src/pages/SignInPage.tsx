@@ -66,12 +66,13 @@ export default function SignInSide() {
     setLoading(true);
 
     if (value.storeCode && value.username && value.password) {
-      const hash = CryptoJS.SHA3(value.password as string, {
-        outputLength: 512,
-      });
       const jsencrypt = new JSEncrypt({});
       jsencrypt.setPublicKey(import.meta.env.VITE_PUBLIC_KEY);
-      const password = jsencrypt.encrypt(hash.toString(CryptoJS.enc.Base64));
+      const password = jsencrypt.encrypt(
+        CryptoJS.SHA3(value.password as string, {
+          outputLength: 512,
+        }).toString(CryptoJS.enc.Base64)
+      );
 
       await userActions.login(value.storeCode, value.username, password);
       setLoading(false);
@@ -164,24 +165,11 @@ export default function SignInSide() {
                 disabled={loading}
                 color="primary"
                 sx={{ mt: 3, mb: 2 }}
-
-                // loading={loading}
+                loading={loading}
+                loadingPosition="start"
               >
                 登录
               </Button>
-              {loading && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    color: green[500],
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    marginTop: "-12px",
-                    marginLeft: "-12px",
-                  }}
-                />
-              )}
             </Box>
 
             <Grid container>

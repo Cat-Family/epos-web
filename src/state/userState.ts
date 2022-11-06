@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 const userInfoAtom = atom<any>({
-  default: JSON.parse(localStorage.getItem("userInfo") || ""),
+  default: localStorage.getItem("userInfo"),
   key: "userInfo",
 });
 
