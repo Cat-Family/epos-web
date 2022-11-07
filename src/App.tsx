@@ -48,6 +48,8 @@ const App = () => {
           <Routes>
             {/* public routes */}
             <Route path="/users/signin" element={<SignInPage />} />
+            <Route path="/users/forgotpass" element={<div>忘记密码</div>} />
+            <Route path="/store/signup" element={<div>店铺注册</div>} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
             {/* store front routes */}

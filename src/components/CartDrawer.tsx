@@ -207,7 +207,7 @@ const CartDrawer = forwardRef((props, ref) => {
             >
               <Button
                 variant="soft"
-                // endicon={<KeyboardArrowRight />}
+                endDecorator={<KeyboardArrowRight />}
                 color="success"
                 onClick={async () => {
                   try {

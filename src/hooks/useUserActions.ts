@@ -45,7 +45,6 @@ const userActions = () => {
       });
       return data.loginInfo;
     } catch (error: any) {
-      console.log(error);
       enqueueSnackbar(error.message || "Network error", { variant: "error" });
       return error;
     }

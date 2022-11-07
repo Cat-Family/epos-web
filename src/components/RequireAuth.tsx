@@ -12,9 +12,9 @@ const RequireAuth: FC<IRequireAuth> = ({ allowedRoles }) => {
   const [auth, setAuth] = useRecoilState(authAtom);
   const location = useLocation();
 
-  return auth ? (
-    userInfo?.basicInfo?.auths.find((role: any) =>
-      allowedRoles?.includes(role)
+  return localStorage.getItem("authInfo") ? (
+    JSON.parse(localStorage.getItem("userInfo") || "")?.basicInfo?.auths.find(
+      (role: any) => allowedRoles?.includes(role)
     ) ? (
       <Outlet />
     ) : (

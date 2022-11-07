@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -13,11 +12,15 @@ import { object, string, TypeOf } from "yup";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import AspectRatio from "@mui/joy/AspectRatio";
-import CircularProgress from "@mui/material/CircularProgress";
-import { green } from "@mui/material/colors";
+import Input from "@mui/joy/Input";
+import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import { useNavigate } from "react-router-dom";
 
 import CryptoJS from "crypto-js";
 import JSEncrypt from "jsencrypt";
+import { IconButton } from "@mui/joy";
+import { Link } from "@mui/joy";
 
 function Copyright(props: any) {
   return (
@@ -28,9 +31,7 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://github.com/Cat-Family">
-        Cat Family
-      </Link>{" "}
+      <Link href="https://github.com/Cat-Family">Cat Family</Link>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -50,6 +51,7 @@ type ValidationInput = TypeOf<typeof validationSchema>;
 
 export default function SignInSide() {
   const userActions = useUserActions();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
@@ -145,7 +147,6 @@ export default function SignInSide() {
               error={errors.hasOwnProperty("username")}
               helperText={errors.username?.message}
             />
-
             <TextField
               margin="normal"
               required
@@ -172,10 +173,15 @@ export default function SignInSide() {
               </Button>
             </Box>
 
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
+            <Grid container justifyContent="space-between" alignItems="center">
+              <Grid item>
+                <Link onClick={() => navigate("/users/forgotpass", {})}>
                   忘记密码?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link onClick={() => navigate("/store/signup", {})}>
+                  注册店铺
                 </Link>
               </Grid>
             </Grid>

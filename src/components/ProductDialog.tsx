@@ -345,7 +345,7 @@ const ProductDialog = forwardRef((props, ref) => {
         </Button>
         <Box sx={{ m: 1, position: "relative" }}>
           <Button
-            // starticon={<Add />}
+            startDecorator={<Add />}
             onClick={handleToCart}
             disabled={loading}
           >
