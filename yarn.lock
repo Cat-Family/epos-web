@@ -1348,12 +1348,7 @@ chalk@^4.1.0, chalk@^4.1.1:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/chalk/-/chalk-5.0.1.tgz"
-  integrity sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w==
-
-chalk@^5.1.2:
+chalk@^5.0.1, chalk@^5.1.2:
   version "5.1.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-5.1.2.tgz"
   integrity sha512-E5CkT4jWURs1Vy5qGJye+XwCkNj7Od3Af7CP6SujMetSMkLs8Do2RWJK5yx1wamHV/op8Rz+9rltjaTQWDnEFQ==
@@ -2298,14 +2293,7 @@ homedir-polyfill@^1.0.1:
   dependencies:
     parse-passwd "^1.0.0"
 
-hosted-git-info@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-5.0.0.tgz"
-  integrity sha512-rRnjWu0Bxj+nIfUOkz0695C0H6tRrN5iYIzYejb0tDEefe2AekHu/U5Kn9pEie5vsJqpNQU02az7TGSH3qpz4Q==
-  dependencies:
-    lru-cache "^7.5.1"
-
-hosted-git-info@^5.1.0:
+hosted-git-info@^5.0.0, hosted-git-info@^5.1.0:
   version "5.2.1"
   resolved "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-5.2.1.tgz"
   integrity sha512-xIcQYMnhcx2Nr4JTjsFmwwnr9vldugPy9uVm0o87bjqqWMv9GaqsTeT+i99wTl0mk1uLxJtHxLb8kymqTENQsw==
@@ -3028,10 +3016,10 @@ npm-bundled@^1.1.1:
   dependencies:
     npm-normalize-package-bin "^1.0.1"
 
-npm-check-updates@^16.3.16:
-  version "16.3.16"
-  resolved "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-16.3.16.tgz"
-  integrity sha512-OJRfwc2+p0ZnDvZQ4FOou9ev4kI6c0Lmu+uEJjijCNUSXnf5AEpyB6+kX31HsmkDzQ10ApA4CvM1TE+rXP+R8g==
+npm-check-updates@^16.3.18:
+  version "16.3.18"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.3.18.tgz#0b6ba72289b4846d9b1e1dea88af420de757765b"
+  integrity sha512-J4qOkWti3D3mDNbo1D7oBEWtSct+HxwU1rRXJyMEPOrkyEXssc1KS7pgvtsXFO8QMtSg7dLyxyi8stLC7ym4+g==
   dependencies:
     chalk "^5.1.2"
     cli-table "^0.3.11"
@@ -3746,14 +3734,7 @@ semver@^6.3.0:
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
-semver@^7.0.0, semver@^7.1.1, semver@^7.3.5, semver@^7.3.7:
-  version "7.3.7"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.3.7.tgz"
-  integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
-  dependencies:
-    lru-cache "^6.0.0"
-
-semver@^7.3.8:
+semver@^7.0.0, semver@^7.1.1, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.npmjs.org/semver/-/semver-7.3.8.tgz"
   integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
