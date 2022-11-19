@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
@@ -35,6 +34,11 @@ import { ModeToggle } from "../app/theme";
 import { enqueueSnackbar } from "notistack";
 import Button from "@mui/joy/Button";
 import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import Tabs from "@mui/joy/Tabs";
+import TabList from "@mui/joy/TabList";
+import Tab, { tabClasses } from "@mui/joy/Tab";
 
 const AppLayout = () => {
   const profileMenuId = "primary-account-menu";
@@ -47,7 +51,7 @@ const AppLayout = () => {
   const isProfileMenuOpen = Boolean(anchorProfileMenu);
   const [table, setTable] = useRecoilState(tableState);
   const [cart, setCart] = useRecoilState<any>(cartState);
-
+  const colors = ["primary", "info", "danger", "success"] as const;
   const logout = async () => {
     await loginOutActions.loginOut();
   };
@@ -158,12 +162,15 @@ const AppLayout = () => {
       >
         <Toolbar>
           <Link to="/">
-            <img
+            {/* <img
               className="logo"
               style={{ height: 32, width: 32 }}
-              src="https://qy-jz.oss-cn-beijing.aliyuncs.com/jz/%E9%AB%98%E6%B8%85logo%E9%80%8F%E6%98%8E%E5%BA%95%E5%8E%9F%E8%89%B2%E5%AD%97.png"
+              src="/images/short_logo.svg"
               alt="logo"
-            />
+            /> */}
+            <Avatar variant="soft" color="neutral">
+              掌
+            </Avatar>
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -227,7 +234,7 @@ const AppLayout = () => {
               <Box sx={{ flexGrow: 1 }} />
             </>
           )}
-          {/* <ModeToggle /> */}
+          <ModeToggle />
           <IconButton
             size="large"
             edge="end"
@@ -261,29 +268,79 @@ const AppLayout = () => {
         <TableDrawer ref={tableDrawer} />
         <CartDrawer ref={cartDrawer} />
       </Box>
-      <Paper elevation={3}>
-        <BottomNavigation showLabels />
-      </Paper>
+
       <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderTopLeftRadius: "1rem",
+          borderTopRightRadius: "1rem",
+        }}
         elevation={3}
       >
-        <BottomNavigation
-          showLabels
+        <Tabs
+          size="lg"
+          aria-label="Bottom Navigation"
           value={value}
-          onChange={(event, newValue) => {
+          onChange={(event, newValue) =>
             navigate(
               newValue === 0 ? "/" : newValue === 1 ? "/bills" : "/report"
-            );
-          }}
+            )
+          }
+          sx={(theme) => ({
+            backgroundColor: theme.palette.background.paper,
+            backgroundImage:
+              "linear-gradient(rgba(255 255 255 / 0.08), rgba(255 255 255 / 0.08))",
+            maxWidth: 400,
+            mx: "auto",
+            "--Tabs-gap": "8px",
+            "--joy-shadowChannel":
+              theme.vars.palette[colors[value]].darkChannel,
+            [`& .${tabClasses.root}`]: {
+              boxShadow: "none",
+              borderRadius: "lg",
+              whiteSpace: "nowrap",
+              transition: "0.3s",
+              fontWeight: "lg",
+              flex: 1,
+              [`&:not(.${tabClasses.selected}):not(:hover)`]: {
+                opacity: 0.72,
+              },
+            },
+          })}
         >
-          <BottomNavigationAction label="点餐" icon={<DiningOutlined />} />
-          <BottomNavigationAction label="账单" icon={<RestoreIcon />} />
-          <BottomNavigationAction
-            label="报表"
-            icon={<AssignmentOutlinedIcon />}
-          />
-        </BottomNavigation>
+          <TabList variant="plain" sx={{ "--List-decorator-size": "28px" }}>
+            <Tab
+              orientation="vertical"
+              {...(value === 0 && { variant: "soft", color: colors[0] })}
+            >
+              <ListItemDecorator>
+                <DiningOutlined />
+              </ListItemDecorator>
+              点餐
+            </Tab>
+            <Tab
+              orientation="vertical"
+              {...(value === 1 && { variant: "soft", color: colors[1] })}
+            >
+              <ListItemDecorator>
+                <RestoreIcon />
+              </ListItemDecorator>
+              账单
+            </Tab>
+            <Tab
+              orientation="vertical"
+              {...(value === 2 && { variant: "soft", color: colors[3] })}
+            >
+              <ListItemDecorator>
+                <AssignmentOutlinedIcon />
+              </ListItemDecorator>
+              报表
+            </Tab>
+          </TabList>
+        </Tabs>
       </Paper>
     </Box>
   );

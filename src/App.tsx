@@ -53,26 +53,26 @@ const App = () => {
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
             {/* store front routes */}
-            <Route element={<RequireAuth allowedRoles={[19999]} />}>
-              <Route path="/" element={<AppLayout />}>
-                <Route
-                  index
-                  element={
-                    <React.Suspense fallback={<div>loading</div>}>
-                      <HomePage />
-                    </React.Suspense>
-                  }
-                />
-                <Route path="/orders" element={<OrdersPage />} />
-                <Route path="bills" element={<BillsPage />} />
-                <Route path="/report" element={<ReportPage />} />
-              </Route>
+            {/* <Route element={<RequireAuth allowedRoles={[19999]} />}> */}
+            <Route path="/" element={<AppLayout />}>
+              <Route
+                index
+                element={
+                  <React.Suspense fallback={<div>loading</div>}>
+                    <HomePage />
+                  </React.Suspense>
+                }
+              />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="bills" element={<BillsPage />} />
+              <Route path="/report" element={<ReportPage />} />
             </Route>
+            {/* </Route> */}
 
             {/* store admin routes */}
-            <Route element={<RequireAuth allowedRoles={[29999]} />}>
-              <Route path="/studio" element={<StudioLayout />}></Route>
-            </Route>
+            {/* <Route element={<RequireAuth allowedRoles={[29999]} />}> */}
+            <Route path="/studio" element={<StudioLayout />}></Route>
+            {/* </Route> */}
 
             {/* catch call */}
             <Route path="*" element={<MissingPage />} />
