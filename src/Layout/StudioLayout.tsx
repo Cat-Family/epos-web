@@ -1,520 +1,197 @@
 import * as React from "react";
-import { GlobalStyles } from "@mui/system";
-import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
-import type { Theme } from "@mui/joy/styles";
-import Avatar from "@mui/joy/Avatar";
-import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
-import ChipDelete from "@mui/joy/ChipDelete";
-import Typography from "@mui/joy/Typography";
-import TextField from "@mui/joy/TextField";
-import IconButton from "@mui/joy/IconButton";
-import Button from "@mui/joy/Button";
-import List from "@mui/joy/List";
-import ListDivider from "@mui/joy/ListDivider";
-import ListItem from "@mui/joy/ListItem";
-import ListItemButton from "@mui/joy/ListItemButton";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
-import ListItemContent from "@mui/joy/ListItemContent";
-import RadioGroup from "@mui/joy/RadioGroup";
-import Radio from "@mui/joy/Radio";
-import Slider from "@mui/joy/Slider";
-import Sheet from "@mui/joy/Sheet";
-import { Link } from "react-router-dom";
-
-// Icons import
-import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
-import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
+import { CssBaseline, IconButton } from "@mui/joy";
+import Toolbar from "@mui/material/Toolbar";
+import { Outlet } from "react-router";
 import MenuIcon from "@mui/icons-material/Menu";
-import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
-import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
-import BookRoundedIcon from "@mui/icons-material/BookRounded";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import Divider from "@mui/material/Divider";
+import Container from "@mui/material/Container";
+import LinkMui from "@mui/material/Link";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { Link } from "react-router-dom";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Typography from "@mui/joy/Typography";
+import Box from "@mui/joy/Box";
 
-// custom
-// import Menu from "./components/Menu";
-import Layout from "../components/Layout";
-
-const ColorSchemeToggle = () => {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="primary" />;
-  }
+function Copyright(props: any) {
   return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="primary"
-      onClick={() => {
-        if (mode === "light") {
-          setMode("dark");
-        } else {
-          setMode("light");
-        }
-      }}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
     >
-      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-};
-
-function TeamNav() {
-  return (
-    <List size="sm" sx={{ "--List-item-radius": "8px" }}>
-      <ListItem nested sx={{ p: 0 }}>
-        <Box
-          sx={{
-            mb: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography
-            id="nav-list-browse"
-            textColor="neutral.500"
-            fontWeight={700}
-            sx={{
-              fontSize: "10px",
-              textTransform: "uppercase",
-              letterSpacing: ".1rem",
-            }}
-          >
-            Browse
-          </Typography>
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="primary"
-            sx={{ "--IconButton-size": "24px" }}
-          >
-            <KeyboardArrowDownRoundedIcon fontSize="small" color="primary" />
-          </IconButton>
-        </Box>
-        <List
-          aria-labelledby="nav-list-browse"
-          sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
-          }}
-        >
-          <ListItem>
-            <ListItemButton variant="soft" color="primary">
-              <ListItemDecorator sx={{ color: "inherit" }}>
-                <PeopleRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>People</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <AssignmentIndRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Managing accounts</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ArticleRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Policies</ListItemContent>
-              <Chip variant="soft" size="sm" sx={{ borderRadius: "sm" }}>
-                Beta
-              </Chip>
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </ListItem>
-    </List>
+      {"Copyright © "}
+      <LinkMui color="inherit" href="https://mui.com/">
+        Your Website
+      </LinkMui>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
   );
 }
 
+const drawerWidth: number = 240;
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  [theme.breakpoints.up("md")]: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  },
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
+
+const mdTheme = createTheme();
+
 export default function StudioLayout() {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
+  const [open, setOpen] = React.useState(true);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
   return (
-    <>
-      {drawerOpen && (
-        <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
-          <TeamNav />
-        </Layout.SideDrawer>
-      )}
-      <Layout.Root
+    <Box sx={{ flexGrow: 1 }}>
+      <CssBaseline />
+      <AppBar
         sx={{
-          ...(drawerOpen && {
-            height: "100vh",
-            overflow: "hidden",
-          }),
+          pr: "24px", // keep right padding when drawer closed
         }}
+        position="fixed"
+        open={open}
       >
-        <Layout.Header>
-          <Box
+        <Toolbar>
+          <IconButton
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={() => toggleDrawer()}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="plain"
+            noWrap
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            千渝掌柜
+          </Typography>
+          <Box sx={{ flex: 1 }} />
+          {/* <Button color="primary">Login</Button> */}
+          <Link to="/">store</Link>
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ display: "flex", flexGrow: 1, minHeight: "100vh" }}>
+        <Drawer
+          sx={(theme) => ({
+            [theme.breakpoints.down("md")]: {
+              display: "none",
+            },
+          })}
+          variant="permanent"
+          open={open}
+        >
+          <Toolbar
             sx={{
               display: "flex",
-              flexDirection: "row",
               alignItems: "center",
-              gap: 1.5,
+              justifyContent: "flex-end",
+              px: [1],
             }}
           >
-            <IconButton
-              variant="outlined"
-              size="sm"
-              onClick={() => setDrawerOpen(true)}
-              sx={{ display: { sm: "none" } }}
-            >
-              <MenuIcon />
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
             </IconButton>
-            <IconButton
-              size="sm"
-              variant="solid"
-              sx={{ display: { xs: "none", sm: "inline-flex" } }}
-            >
-              <GroupRoundedIcon />
-            </IconButton>
-            <Typography component="h1" fontWeight="xl">
-              Team
-            </Typography>
-          </Box>
-          <TextField
-            size="sm"
-            placeholder="Search anything…"
-            startDecorator={<SearchRoundedIcon color="primary" />}
-            endDecorator={
-              <IconButton variant="outlined" size="sm" color="neutral">
-                <Typography
-                  fontWeight="lg"
-                  fontSize="sm"
-                  textColor="text.tertiary"
-                >
-                  /
-                </Typography>
-              </IconButton>
-            }
-            sx={{
-              flexBasis: "500px",
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
-            }}
-          />
-          <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              sx={{ display: { xs: "inline-flex", sm: "none" } }}
-            >
-              <SearchRoundedIcon />
-            </IconButton>
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component={Link}
-              to="/"
-            >
-              <BookRoundedIcon />
-            </IconButton>
-            {/* <Menu
-              id="app-selector"
-              control={
-                <IconButton
-                  size="sm"
-                  variant="outlined"
-                  color="primary"
-                  aria-label="Apps"
-                >
-                  <GridViewRoundedIcon />
-                </IconButton>
-              }
-              menus={[
-                {
-                  label: "Email",
-                  href: "/joy-ui/getting-started/templates/email/",
-                },
-                {
-                  label: "Team",
-                  active: true,
-                  href: "/joy-ui/getting-started/templates/team/",
-                  "aria-current": "page",
-                },
-                {
-                  label: "Files",
-                  href: "/joy-ui/getting-started/templates/files/",
-                },
-              ]}
-            /> */}
-            <ColorSchemeToggle />
-          </Box>
-        </Layout.Header>
-        <Layout.SideNav>
-          <TeamNav />
-        </Layout.SideNav>
-        <Layout.SidePane>
-          <Box
-            sx={{
-              p: 2,
-              pb: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              fontSize="xs2"
-              textColor="text.tertiary"
-              textTransform="uppercase"
-              letterSpacing="md"
-              fontWeight="lg"
-            >
-              Filter by
-            </Typography>
-            <Button size="sm" variant="plain" sx={{ fontSize: "xs", px: 1 }}>
-              Clear filters
-            </Button>
-          </Box>
-          <Box sx={{ p: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography level="body2" textColor="text.primary">
-                By keywords
-              </Typography>
-              <IconButton
-                size="sm"
-                variant="plain"
-                color="primary"
-                sx={{ "--IconButton-size": "24px" }}
-              >
-                <KeyboardArrowUpRoundedIcon fontSize="small" color="primary" />
-              </IconButton>
-            </Box>
-            <Box sx={{ mt: 2 }}>
-              <TextField placeholder="Position, skills, etc…" />
-              <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-                <Chip
-                  variant="soft"
-                  size="sm"
-                  endDecorator={<ChipDelete variant="soft" />}
-                  sx={{ "--Chip-radius": (theme) => theme.vars.radius.sm }}
-                >
-                  UI designer
-                </Chip>
-              </Box>
-            </Box>
-          </Box>
-          <ListDivider component="hr" />
-          <Box sx={{ p: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography level="body2" textColor="text.primary">
-                Location
-              </Typography>
-              <IconButton
-                size="sm"
-                variant="plain"
-                color="primary"
-                sx={{ "--IconButton-size": "24px" }}
-              >
-                <KeyboardArrowUpRoundedIcon fontSize="small" color="primary" />
-              </IconButton>
-            </Box>
-            <Box sx={{ mt: 2 }}>
-              <TextField placeholder="Search for a city" />
-              <Box sx={{ mt: 3, display: "flex", gap: 1 }}>
-                <Slider
-                  valueLabelFormat={(value) => `${value} km`}
-                  defaultValue={6}
-                  step={1}
-                  min={0}
-                  max={20}
-                  valueLabelDisplay="on"
-                />
-              </Box>
-            </Box>
-          </Box>
-          <ListDivider component="hr" />
-          <Box sx={{ p: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography level="body2" textColor="text.primary">
-                Education
-              </Typography>
-              <IconButton
-                size="sm"
-                variant="plain"
-                color="primary"
-                sx={{ "--IconButton-size": "24px" }}
-              >
-                <KeyboardArrowUpRoundedIcon fontSize="small" color="primary" />
-              </IconButton>
-            </Box>
-            <Box sx={{ mt: 2 }}>
-              <RadioGroup name="education" defaultValue="any">
-                <Radio label="Any" value="any" size="sm" />
-                <Radio label="High School" value="high-school" size="sm" />
-                <Radio label="College" value="college" size="sm" />
-                <Radio label="Post-graduate" value="post-graduate" size="sm" />
-              </RadioGroup>
-            </Box>
-          </Box>
-          <ListDivider component="hr" />
-          <Box sx={{ p: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography level="body2" textColor="text.primary">
-                Previous experience
-              </Typography>
-              <IconButton
-                size="sm"
-                variant="plain"
-                color="primary"
-                sx={{ "--IconButton-size": "24px" }}
-              >
-                <KeyboardArrowDownRoundedIcon
-                  fontSize="small"
-                  color="primary"
-                />
-              </IconButton>
-            </Box>
-          </Box>
-        </Layout.SidePane>
-        <Layout.Main>
-          <List
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: 2,
-            }}
-          >
-            {[...Array(3)].map((_, index) => (
-              <Sheet
-                key={index}
-                component="li"
-                variant="outlined"
-                sx={{
-                  bgcolor: "background.componentBg",
-                  borderRadius: "sm",
-                  p: 2,
-                  listStyle: "none",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Avatar
-                    src="https://i.pravatar.cc/40?img=6"
-                    srcSet="https://i.pravatar.cc/80?img=6 2x"
-                    sx={{ borderRadius: "sm" }}
-                  />
-                  <Box>
-                    <Typography>Andrew Smith</Typography>
-                    <Typography level="body3">UI Designer</Typography>
-                  </Box>
-                </Box>
-                <ListDivider component="div" sx={{ my: 2 }} />
-                <List sx={{ "--List-decorator-size": "48px" }}>
-                  <ListItem sx={{ alignItems: "flex-start" }}>
-                    <ListItemDecorator
-                      sx={{
-                        "&:before": {
-                          content: '""',
-                          position: "absolute",
-                          height: "100%",
-                          width: "2px",
-                          bgcolor: "divider",
-                          left: "calc(var(--List-item-paddingLeft) + 15px)",
-                          top: "50%",
-                        },
-                      }}
-                    >
-                      <Avatar
-                        size="sm"
-                        src="https://seeklogo.com/images/D/dribbble-logo-143FF96D65-seeklogo.com.png"
-                      />
-                    </ListItemDecorator>
-                    <ListItemContent>
-                      <Typography level="body2">Senior designer</Typography>
-                      <Typography level="body3">Dribbble</Typography>
-                    </ListItemContent>
-                    <Typography level="body2">2015-now</Typography>
-                  </ListItem>
-                  <ListItem sx={{ alignItems: "flex-start" }}>
-                    <ListItemDecorator>
-                      <Avatar
-                        size="sm"
-                        src="https://seeklogo.com/images/P/pinterest-logo-CA98998DCB-seeklogo.com.png"
-                      />
-                    </ListItemDecorator>
-                    <ListItemContent>
-                      <Typography level="body2">Desinger</Typography>
-                      <Typography level="body3">Pinterest</Typography>
-                    </ListItemContent>
-                    <Typography level="body2">2012-2015</Typography>
-                  </ListItem>
-                </List>
-                <Button
-                  size="sm"
-                  variant="plain"
-                  endicon={<KeyboardArrowRightRoundedIcon fontSize="small" />}
-                  sx={{ px: 1, mt: 1 }}
-                >
-                  Expand
-                </Button>
-                <ListDivider component="div" sx={{ my: 2 }} />
-                <Typography fontSize="sm">Skills tags:</Typography>
-                <Box sx={{ mt: 1.5, display: "flex", gap: 1 }}>
-                  <Chip
-                    variant="outlined"
-                    color="neutral"
-                    size="sm"
-                    sx={{ borderRadius: "sm" }}
-                  >
-                    UI design
-                  </Chip>
-                  <Chip
-                    variant="outlined"
-                    color="neutral"
-                    size="sm"
-                    sx={{ borderRadius: "sm" }}
-                  >
-                    Illustration
-                  </Chip>
-                </Box>
-              </Sheet>
-            ))}
-          </List>
-        </Layout.Main>
-      </Layout.Root>
-    </>
+          </Toolbar>
+          <Divider />
+        </Drawer>
+
+        <SwipeableDrawer
+          // swipeAreaWidth={120}
+          sx={(theme) => ({
+            [theme.breakpoints.up("md")]: {
+              display: "none",
+            },
+          })}
+          anchor="left"
+          open={open}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          variant="temporary"
+        ></SwipeableDrawer>
+        <Box
+          component="main"
+          // sx={{
+          //   backgroundColor: (theme) =>
+          //     theme.palette.mode === "light"
+          //       ? theme.palette.grey[100]
+          //       : theme.palette.grey[900],
+          //   flexGrow: 1,
+
+          // }}
+
+          sx={{
+            flexGrow: 1,
+            overflow: "auto",
+          }}
+        >
+          <Toolbar />
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Outlet />
+            <Copyright sx={{ pt: 4 }} />
+          </Container>
+        </Box>
+      </Box>
+    </Box>
   );
 }

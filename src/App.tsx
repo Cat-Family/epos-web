@@ -24,6 +24,7 @@ import BillsPage from "./pages/BillsPage";
 import ReportPage from "./pages/ReportPage";
 import MissingPage from "./pages/MissingPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import DashboardPage from "./pages/Dashboard";
 
 const App = () => {
   const user = userActions();
@@ -71,7 +72,9 @@ const App = () => {
 
             {/* store admin routes */}
             {/* <Route element={<RequireAuth allowedRoles={[29999]} />}> */}
-            <Route path="/studio" element={<StudioLayout />}></Route>
+            <Route path="/studio" element={<StudioLayout />}>
+              <Route index element={<DashboardPage />} />
+            </Route>
             {/* </Route> */}
 
             {/* catch call */}

@@ -161,17 +161,21 @@ const AppLayout = () => {
         }
       >
         <Toolbar>
-          <Link to="/">
-            {/* <img
-              className="logo"
-              style={{ height: 32, width: 32 }}
-              src="/images/short_logo.svg"
-              alt="logo"
-            /> */}
-            <Avatar variant="soft" color="neutral">
-              掌
-            </Avatar>
-          </Link>
+          <Typography
+            variant="plain"
+            noWrap
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            千渝掌柜
+          </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
           {location.pathname === "/" && (
