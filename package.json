@@ -21,7 +21,7 @@
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
     "i18next": "^22.0.4",
-    "jsencrypt": "travist/jsencrypt#v3.3.1",
+    "jsencrypt": "travist/jsencrypt#v3.3.2",
     "notistack": "3.0.0-alpha.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
